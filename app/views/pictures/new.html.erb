@@ -1,0 +1,80 @@
+<html>
+<head>
+	<title>Upload New Picture</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
+	<style type="text/css">
+		option, input{
+			display:block;
+		}
+	</style>
+	<script type="text/javascript">
+		//ajax submit
+
+		function GroupName()
+		{
+			var group_name = $("#picture_group").val();
+			if(group_name=="new group")
+			{
+				$("#ng").show();
+			}
+			else if(group_name==undefined)
+			{
+				clearInterval(groupInterval);
+			}
+			else
+			{
+				$("#ng").hide();
+			}
+		}
+		function Message()
+		{
+			$(".success_message").html('');
+			clearInterval(success_message);
+		}
+		$(document).ready(function(){	
+			$("#ng").hide();
+			$("#new_picture").submit(function(){
+				$.post($(this).attr('action'),$(this).serialize(),function(data)
+				{
+					if(data.success)
+					{
+						$("#message").append("<p class='success_message'>"+data.success+"</p>");
+						success_message = setInterval("Message()",5000)
+					}
+					else
+					{
+						$("#message").append("<p class='fail_message'>"+data.fail+"</p>");
+					}
+				})
+				return false;
+			})
+
+		})
+		groupInterval = setInterval("GroupName()",500);
+	</script>
+</head>
+<body>
+	<a href="/homes/calendar">back</a>
+	<%if flash[:message] %>
+		<p><%=flash[:message] %></p>
+	<% end%>
+	<h4>Upload Picture</h4>
+	<div id='message'>
+
+	</div>
+
+	<%= form_for @picture, :url =>'/pictures/create', :html=>{:multipart=>true} do |f|%>
+		<%= select_tag("picture[group]", options_for_select(@group_names)) %>
+		<%= hidden_field_tag("picture[user_id]", @user.id) %>
+		<div id='ng'>
+			 <%= text_field_tag("picture[new_group]") %>
+		</div>
+		<%= f.file_field :image %>
+	<%= f.submit :submit %>
+	<%end %>
+	<a href="">Go to Groups</a>
+</body>
+</html>
+
+<!-- write jquery: hide #new_group and if 'New Group' is selected in box appears, deselected box disappears -->
+
