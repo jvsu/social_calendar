@@ -26,28 +26,28 @@
 				$("#ng").hide();
 			}
 		}
-		function Message()
-		{
-			$(".success_message").html('');
-			clearInterval(success_message);
-		}
+		// function Message()
+		// {
+		// 	$(".success_message").html('');
+		// 	clearInterval(success_message);
+		// }
 		$(document).ready(function(){	
 			$("#ng").hide();
-			$("#new_picture").submit(function(){
-				$.post($(this).attr('action'),$(this).serialize(),function(data)
-				{
-					if(data.success)
-					{
-						$("#message").append("<p class='success_message'>"+data.success+"</p>");
-						success_message = setInterval("Message()",5000)
-					}
-					else
-					{
-						$("#message").append("<p class='fail_message'>"+data.fail+"</p>");
-					}
-				})
-				return false;
-			})
+		// 	$("#new_picture").submit(function(){
+		// 		$.post($(this).attr('action'),$(this).serialize(),function(data)
+		// 		{
+		// 			if(data.success)
+		// 			{
+		// 				$("#message").append("<p class='success_message'>"+data.success+"</p>");
+		// 				success_message = setInterval("Message()",5000)
+		// 			}
+		// 			else
+		// 			{
+		// 				$("#message").append("<p class='fail_message'>"+data.fail+"</p>");
+		// 			}
+		// 		})
+		// 		return false;
+		// 	})
 
 		})
 		groupInterval = setInterval("GroupName()",500);
@@ -72,7 +72,7 @@
 		<%= f.file_field :image %>
 	<%= f.submit :submit %>
 	<%end %>
-	<a href="">Go to Groups</a>
+	<a href="/groups/all">Go to Groups</a>
 </body>
 </html>
 

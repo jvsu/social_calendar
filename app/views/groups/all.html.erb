@@ -1,2 +1,21 @@
-<h1>Groups#all</h1>
-<p>Find me in app/views/groups/all.html.erb</p>
+<html>
+<head>
+	<title>All Groups</title>
+	<style type="text/css">
+	.group h3{
+		text-transform: capitalize;
+	}
+
+	</style>
+</head>
+<body>
+	<a href="/pictures/new">Back</a>
+	<h3>Groups</h3>
+	<%@groups.each do |g| %>
+		<div class='group'>
+			<h3><a href="/groups/view/<%=g%>"><%=g%></a></h3>
+		</div>
+	<%end %>
+
+</body>
+</html>

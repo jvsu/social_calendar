@@ -1,2 +1,32 @@
-<h1>Pictures#view</h1>
-<p>Find me in app/views/pictures/view.html.erb</p>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		img{
+			width:350px;
+			height:400px;
+		}
+	</style>
+</head>
+<body>
+	<a href="">Back</a>
+	<h2>Social Calendar</h2>
+	<%= image_tag @picture.image.url %>
+	<a href="/events/new/<%=@picture.id%>">Share</a>
+	<div>
+		<form>
+			<input type='text' name='Description' placeholder='description'>
+			<select>
+				<% for i in 1..30%>
+					<option  value=<%=i%>><%=i%></option>
+				<% end%>
+			</select>
+			<input type='date' name='date'>
+			<select name='circle'>
+				<option value='all_friends'>All Friends</option>
+			</select>
+			<input type='submit' value='Submit'>
+		</form>
+	</div>
+</body>	
+</html>

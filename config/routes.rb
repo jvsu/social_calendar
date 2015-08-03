@@ -87,7 +87,7 @@ Rails.application.routes.draw do
 
   get 'events/view'
 
-  get 'events/new'
+  get 'events/new/:picture_id'=>"events#new"
 
   get 'events/create'
 
@@ -97,7 +97,7 @@ Rails.application.routes.draw do
 
   get 'groups/all'
 
-  get 'groups/view'
+  get 'groups/view/:name'=>"groups#view"
 
   get 'groups/new'
 
@@ -115,9 +115,11 @@ Rails.application.routes.draw do
 
   get 'pictures/delete'
 
-  get 'pictures/view'
+  get 'pictures/view/:picture_id'=>"pictures#view"
 
   get 'pictures/all'
+
+  get 'friends/find/'=>"friends#find"
 
   get 'friends/all'
 
@@ -149,6 +151,8 @@ Rails.application.routes.draw do
   devise_for :users
   match '/pictures/create' => 'pictures#create', :via=>[:get,:post];
   match '/homes/calendar' => 'homes#calendar', :via=>[:get,:post];
+  match '/friends/search' => 'friends#search', :via=>[:get,:post];
+  
      
 
   # The priority is based upon order of creation: first created -> highest priority.

@@ -1,5 +1,6 @@
 class EventsController < ApplicationController
   def all
+    
   end
 
   def view

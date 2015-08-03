@@ -1,2 +1,30 @@
-<h1>Groups#view</h1>
-<p>Find me in app/views/groups/view.html.erb</p>
+<html>
+<head>
+	<title><%=@group_name%></title>
+	<style type="text/css">
+		img{
+			width:350px;
+			height:350px;
+		}
+		.picture{
+			display:inline-block;
+		}
+		#picture_stream{
+			width:710px;
+		}
+	</style>
+</head>
+<body>
+	<a href="">Back</a>
+	<h3><%=@group_name %></h3>
+	<div id='picture_stream'>
+		<% @groups.each do |g|%>
+			<div class='picutre'>
+				<a href="/pictures/view/<%=g.picture.id%>"><%=image_tag g.picture.image.url %></a>
+			</div>
+		<% end%>
+	</div>
+	
+
+</body>
+</html>

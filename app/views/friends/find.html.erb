@@ -1,0 +1,29 @@
+<html>
+<head>
+	<title>Find Friends</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#search").submit(function(){
+				$.post($(this).attr('action'),$(this).serialize(),function(data){
+					console.log(data.people);
+					console.log('hello');
+
+				},"json")
+				return false;
+			})
+		})
+	</script>
+</head>
+<body>
+	<h1>Find friends</h1>
+	<form action='/friends/search' method='post' id='search'>
+		<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+		<input type='text' name='friend[user_name]' placeholder='Enter User Name'>
+		<input type='submit' value='Submit'>
+	</form>
+	<div id='people'>
+
+	</div>
+</body>
+</html>

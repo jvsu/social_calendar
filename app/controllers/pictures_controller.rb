@@ -23,11 +23,14 @@ class PicturesController < ApplicationController
             group_names.delete(i)
           end
         end
+
         @group_names = [["UNCATEGORIZED",'uncategorized'],['NEW GROUP','new group']]
         
         for i in 0..group_names.length-1
           @group_names.push([group_names[i].upcase,group_names[i]]);
         end
+    else
+        @group_names = [["UNCATEGORIZED",'uncategorized'],['NEW GROUP','new group']]
     end
   end
 
@@ -37,26 +40,30 @@ class PicturesController < ApplicationController
       if picture.save
          new_group_name = picture_params[:new_group].downcase
         group = Group.new(name:new_group_name, picture_id:picture.id).save
-        json_data = {success:"Picture Saved and Group Created",status:"success"}
-        render json:json_data
-        # flash[:message] ='Picture and Group Saved'
-        # redirect_to "/pictures/new"
+        # json_data = {success:"Picture Saved and Group Created",status:"success"}
+        # render json:json_data
+        flash[:message] ='Picture and Group Saved'
+        redirect_to "/pictures/new"
       else
-        json_data = {fail:"Picture Did Not Save", status:"fail"}
-        render json:json_data
+        # json_data = {fail:"Picture Did Not Save", status:"fail"}
+        # render json:json_data
+        flash[:message] ='Picture Did Not Save'
+        redirect_to "/pictures/new"
 
       end
     else
         picture = Picture.new(user_id:picture_params[:user_id],image:picture_params[:image])
         if picture.save
           group = Group.new(name:picture_params[:group], picture_id:picture.id).save
-          json_data = {success:"Picture Saved", status:"success"}
-          render json:json_data
-          # flash[:message] ='1Picture and Group Saved'
-          # redirect_to "/pictures/new"
+          # json_data = {success:"Picture Saved", status:"success"}
+          # render json:json_data
+          flash[:message] ='1Picture Saved'
+          redirect_to "/pictures/new"
         else
-           json_data = {fail:"Picture Did Not Save", status:"fail"}
-           render json:json_data
+           # json_data = {fail:"Picture Did Not Save", status:"fail"}
+           # render json:json_data
+        flash[:message] ='Picture Did Not Save'
+        redirect_to "/pictures/new"
        end
     end
   end
@@ -68,6 +75,9 @@ class PicturesController < ApplicationController
   end
 
   def view
+    @user = current_user
+    @picture = Picture.find(params[:picture_id])
+    
   end
 
   def all
@@ -75,6 +85,10 @@ class PicturesController < ApplicationController
   private
   def picture_params
     params.require(:picture).permit(:image,:new_group,:group, :user_id)
+  end
+
+  def new_picture_params
+    params.require(:picture).permit(:image,:user_id)
   end
 
 
