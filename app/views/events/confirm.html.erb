@@ -1,0 +1,37 @@
+<html>
+<head>
+	<title></title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('form').submit(function(){
+				$.post($(this).attr('action'),$(this).serialize(),function(data){	
+					//replace form with message
+					$("#confirm_"+data.event_id).html("<p>"+data.message+"</p>");
+				},"json")
+				return false;
+			})
+		})
+
+	</script>
+</head>
+<body>
+	<div id='confirm_events'>
+		<h4>Confirm Event</h4>
+		<% @invitations.each do |i|%>
+			<div class='invitation' id='confirm_<%=i.event.id %>'>
+				<%=image_tag i.event.picture.image.url%>
+				<p><%=i.event.description %></p>
+				<p><%= i.event.time.strftime("at %I:%M%p")%></p>
+				<form action='/joins/confirm' method='post'>
+					<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+					<input type='hidden' name='join[user_id]' value="<%=@user.id %>">
+					<input type='hidden' name='join[event_id]' value=<%=i.event.id %>>
+					<input type='hidden' name='join[confirm]' value=<%=true%>>
+					<input type='submit' value='Confirm'> 
+				</form>
+			</div>
+		<%end %>		
+	</div>
+</body>
+</html>

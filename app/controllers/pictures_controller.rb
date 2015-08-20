@@ -9,6 +9,7 @@ class PicturesController < ApplicationController
     pictures = Picture.all.where(:user_id=>@user.id)
     groups = Group.all
 
+    #put a the groups that belong to the user in an array
     if groups.length >0
       groups.each do |group|
         if group.picture.user_id == @user.id
@@ -17,18 +18,15 @@ class PicturesController < ApplicationController
       end
       #remove duplicates from group name
         group_names = group_names.uniq
-      # remove uncategoried
-        for i in 0..group_names.length
-          if group_names[i]=="uncategorized"
-            group_names.delete(i)
-          end
-        end
 
-        @group_names = [["UNCATEGORIZED",'uncategorized'],['NEW GROUP','new group']]
-        
+      #remove uncategorized
+      group_names.delete("uncategorized");
+      @group_names = [["UNCATEGORIZED",'uncategorized'],['NEW GROUP','new group']]
+
         for i in 0..group_names.length-1
           @group_names.push([group_names[i].upcase,group_names[i]]);
         end
+
     else
         @group_names = [["UNCATEGORIZED",'uncategorized'],['NEW GROUP','new group']]
     end
@@ -38,6 +36,7 @@ class PicturesController < ApplicationController
     if picture_params[:group] =="new group"
       picture = Picture.new(user_id:picture_params[:user_id],image:picture_params[:image]) #put picture in the DB
       if picture.save
+        # find out if group name already exists
          new_group_name = picture_params[:new_group].downcase
         group = Group.new(name:new_group_name, picture_id:picture.id).save
         # json_data = {success:"Picture Saved and Group Created",status:"success"}
@@ -77,6 +76,8 @@ class PicturesController < ApplicationController
   def view
     @user = current_user
     @picture = Picture.find(params[:picture_id])
+    @circles = Circle.all.where(user_id:@user.id)
+    @group = Group.all.where(picture_id:@picture.id)
     
   end
 

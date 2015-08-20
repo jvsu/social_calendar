@@ -1,0 +1,36 @@
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<div id='today'>
+		<%if @today%>
+			<a href="/streams/view/today"><h1>Today</h1></a>
+			<% @today.each do |e|%>
+			<div class='event' id='t_<%=e.id%>'>
+				<a href=""><%= image_tag e.picture.image.url%></a>
+				<div class='all_event_info' id="t_<%=e.id%>_all_events">
+					<p><%= e.user.first_name%> <%=e.user.last_name%></p>
+					<p><%=e.description %></p>
+				</div>
+			</div>
+			<%end %>
+		<%end %>
+	</div>
+	<div id='day1' class='day_stream'>
+		<% if @day_events%>
+		<a href="/streams/view/1"><h1><%=@date_name%>-<%=@day_date_title %></h1></a>
+			<%@day_events.each do |e|%>
+				<div class='event' id='1_<%=e.id%>'>
+					<a href=""><%= image_tag e.picture.image.url%></a>
+					<div class='all_event_info' id="1_<%=e.id%>_all_events">
+					<p><%= e.user.first_name%> <%=e.user.last_name%></p>
+					<p><%=e.description %></p>
+				</div>
+				</div>
+			<%end %>
+		<%end %>		
+	</div>
+
+</body>
+</html>

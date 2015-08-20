@@ -6,16 +6,75 @@
 		$(document).ready(function(){
 			$("#search").submit(function(){
 				$.post($(this).attr('action'),$(this).serialize(),function(data){
-					console.log(data.people);
-					console.log('hello');
-
+					if(data.people=="User Found")
+					{
+						$("#people").html("<p class='line_one'>"+data.first_name+" "+data.last_name+"</p><p class='line_two'>"+data.user_name+"</p>");
+						if(data.status=='Friend Request')
+						{
+							//puts form out for friend request
+							$("#request").html("<form action='/friend_requests/create' method='post' id='friend_request'>"+"<input name='authenticity_token' value='<%= form_authenticity_token %>' type='hidden'><input id='fr_friend_id' type='hidden' name='friend[friend_id]' value="+data.friend_id+"><input id='fr_user_id' type='hidden' name='friend[user_id]' value="+data.current_user_id+"><input id='fr_pending' type='hidden' name='friend[pending_requester]' value=true><input type='hidden' name='friend[pending_confirmer]' value=true></div></select><input type='Submit' value='Send Friend Request' id='friend_sub'></form>");
+						}
+						else if(data.status=='Pending')
+						{
+							$("#request").html("<p class='pending'>Request Pending</p>");
+						}
+						else if(data.status=='Circle')
+						{
+							$("#request").html("<a href='/friend_requests/all' class='pending'>Add to Circle</a>");
+						}
+						else if(data.status=='Unfriend')
+						{
+							$("#request").html("<a href='' class='pending'>Unfriend</a>");
+						}
+						else if(data.status=='Confirm')
+						{
+							$("#request").html("<a href='/friend_requests/all' class='pending'>Confirm Friend Request</a>");
+						}
+						else 
+						{
+							$("#request").html("<p>Unfriend</p>");
+						}
+					}
+					else
+					{
+						$("#people").html("<p>"+data.people+"</p>");
+						$("#request").html("")
+					}
 				},"json")
 				return false;
 			})
+			
+		})// end of ready
+
+		$(document).on("submit","#friend_request",function(){
+			$.post($(this).attr('action'),$(this).serialize(),function(data){
+				if(data.status=='success')
+				{
+					$("#request").html("<p class='pending'>Friend Request Sent</p>");
+				}
+				else
+				{
+					alert('friend request sucked');
+				}
+				
+				},"json")
+			return false;
 		})
 	</script>
+	<style type="text/css">
+		.line_one{
+			text-transform: capitalize;
+		}
+		.line_two{
+			text-transform: capitalize;
+		}
+		#people input{
+			display:block;
+		}
+	</style>
 </head>
 <body>
+	<a href="/events/all">Back</a>
 	<h1>Find friends</h1>
 	<form action='/friends/search' method='post' id='search'>
 		<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
@@ -23,7 +82,8 @@
 		<input type='submit' value='Submit'>
 	</form>
 	<div id='people'>
-
+	</div>
+	<div id='request'>
 	</div>
 </body>
 </html>

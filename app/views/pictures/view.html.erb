@@ -6,25 +6,49 @@
 			width:350px;
 			height:400px;
 		}
+		input{
+			display:block;
+		}
 	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#new_event").submit(function(){
+				$.post($(this).attr('action'),$(this).serialize(),function(data){
+					$("#message").html("<p>"+data.message+"</p>")
+				},"json")
+			return false;
+			})
+		})
+
+	</script>
 </head>
 <body>
-	<a href="">Back</a>
+	<a href="/groups/view/<%=@group[0][:name]%>">Back</a>
 	<h2>Social Calendar</h2>
+	<div id='message'>
+
+	</div>
 	<%= image_tag @picture.image.url %>
 	<a href="/events/new/<%=@picture.id%>">Share</a>
 	<div>
-		<form>
-			<input type='text' name='Description' placeholder='description'>
-			<select>
+		<form action='/events/create' method='post' id='new_event'>
+			<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+			<input type='text' name='event[description]' placeholder='description'>
+			Join Threshold
+			<select name='event[join_threshold]'>
 				<% for i in 1..30%>
 					<option  value=<%=i%>><%=i%></option>
 				<% end%>
 			</select>
-			<input type='date' name='date'>
-			<select name='circle'>
-				<option value='all_friends'>All Friends</option>
+			<input type='date' name='event[date]'>
+			<select name='event[circle_id]'>
+				<% @circles.each do |c|%>
+					<option value='<%= c.id%>'><%=c.name %></option>
+				<%end %>
 			</select>
+			<input type='hidden' name='event[user_id]' value=<%=@user.id %>>
+			<input type='hidden' name='event[picture_id]' value=<%=@picture.id %>>
 			<input type='submit' value='Submit'>
 		</form>
 	</div>

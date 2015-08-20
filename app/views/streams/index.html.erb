@@ -1,0 +1,330 @@
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> 
+	<style type="text/css">
+	.event img{
+		width:300px;
+		height:300px;
+	}
+	.event{
+		display:inline-block;
+	}
+	#bottom_container{
+		height:120px;
+	}
+	#all_events, #today, .day_stream{
+		overflow-x: scroll;
+    	overflow-y: hidden;
+    	white-space: nowrap;
+	}
+	.all_event_info{
+		height:20px;
+	}
+	.day_stream{
+		margin:10px;
+	}
+		.user_info img{
+			width:50px;
+			height:50px;
+			display:inline-block;
+		}
+		.user_info p{
+			display:inline-block;
+			text-transform: capitalize;
+			
+		}
+		.user_name{
+			text-transform: capitalize;
+		}
+		.event{
+			margin:10px;
+		}
+	</style>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$(".all_event_info").hide();
+			$( ".event" ).hover(
+  				function() {
+   					 var id = this.id;
+   					 if(id[0]=='v')
+   					 {
+   					 	var new_id = "info_"+id;
+   					 	$("#"+new_id).toggle();
+   					 }
+   					 if(id[0]=='t')
+   					 {
+   					 	var new_id = id+"_all_events"
+   					 	$("#"+new_id).toggle();
+   					 }
+   					  if(id[0]=='1')
+   					 {
+   					 	var new_id = id+"_all_events"
+   					 	$("#"+new_id).toggle();
+   					 }
+   					  if(id[0]=='2')
+   					 {
+   					 	var new_id = id+"_all_events"
+   					 	$("#"+new_id).toggle();
+   					 }
+   					  if(id[0]=='3')
+   					 {
+   					 	var new_id = id+"_all_events"
+   					 	$("#"+new_id).toggle();
+   					 }
+   					  if(id[0]=='4')
+   					 {
+   					 	var new_id = id+"_all_events"
+   					 	$("#"+new_id).toggle();
+   					 }
+   					  if(id[0]=='5')
+   					 {
+   					 	var new_id = id+"_all_events"
+   					 	$("#"+new_id).toggle();
+   					 }
+   					  if(id[0]=='6')
+   					 {
+   					 	var new_id = id+"_all_events"
+   					 	$("#"+new_id).toggle();
+   					 }
+   					  if(id[0]=='7')
+   					 {
+   					 	var new_id = id+"_all_events"
+   					 	$("#"+new_id).toggle();
+   					 }
+
+  						}, function() {
+   					 	$(".all_event_info").hide();
+  					}
+				);
+			})
+	</script>
+</head>
+<body>
+	<a href="/streams/all"><h1>All Events</h1></a>
+	<div id='all_events'>
+		<%@all_events.each do |e|%>
+			<div class='event' id="v_all_events<%=e.id%>">
+				<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>
+				<div class='all_event_info' id="info_v_all_events<%=e.id%>">
+					<div class='user_info'>
+							<%@avatar.each do |av| %>
+								<%if av.user_id ==e.user.id %>
+									<%=image_tag av.profile_pic.url %>
+								<%else %>
+									<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
+								<%end %>
+							<%end %>
+							<p><%= e.user.first_name%> <%=e.user.last_name%></p>
+						</div>
+					<p><%=e.description %></p>
+				</div>
+			</div>
+			
+		<% end%>
+	</div>
+
+	<div id='today'>
+		<%if @today.length>0 %>
+			<a href="/streams/view/today"><h1>Today</h1></a>
+			<% @today.each do |e|%>
+			<div class='event' id='t_<%=e.id%>'>
+				<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>
+				<div class='all_event_info' id="t_<%=e.id%>_all_events">
+					<div class='user_info'>
+							<%@avatar.each do |av| %>
+								<%if av.user_id ==e.user.id %>
+									<%=image_tag av.profile_pic.url %>
+								<%else %>
+									<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
+								<%end %>
+							<%end %>
+							<p><%= e.user.first_name%> <%=e.user.last_name%></p>
+						</div>
+					<p><%=e.description %></p>
+				</div>
+			</div>
+			<%end %>
+		<%end %>
+	</div>
+
+
+	<div id='day1' class='day_stream'>
+		<% if @day1.length>0%>
+		<a href="/streams/view/1"><h1><%=@date1_name%>-<%=@day1_date_title %></h1></a>
+			<%@day1.each do |e|%>
+				<div class='event' id='1_<%=e.id%>'>
+					<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>
+					<div class='all_event_info' id="1_<%=e.id%>_all_events">
+						<div class='user_info'>
+							<%@avatar.each do |av| %>
+								<%if av.user_id ==e.user.id %>
+									<%=image_tag av.profile_pic.url %>
+								<%else %>
+									<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
+								<%end %>
+							<%end %>
+							<p><%= e.user.first_name%> <%=e.user.last_name%></p>
+						</div>
+					
+					<p><%=e.description %></p>
+				</div>
+				</div>
+			<%end %>
+		<%end %>		
+	</div>
+	<div class='day_stream'>
+		<% if @day2.length>0%>
+			<a href="/streams/view/2"><h1><%=@date2_name%>: <%=@day2_date_title %></h1></a> 
+			<%@day2.each do |e|%>
+				<div class='event' id='2_<%=e.id%>'>
+					<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>
+					<div class='all_event_info' id="2_<%=e.id%>_all_events">
+						<div class='user_info'>
+							<%@avatar.each do |av| %>
+								<%if av.user_id ==e.user.id %>
+									<%=image_tag av.profile_pic.url %>
+								<%else %>
+									<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
+								<%end %>
+							<%end %>
+							<p><%= e.user.first_name%> <%=e.user.last_name%></p>
+						</div>
+					
+						<p><%=e.description %></p>
+					</div>
+				</div>
+			<%end %>
+		<%end %>	
+	</div>
+
+	<div class='day_stream'>
+		<% if @day3.length>0%>
+			<a href="/streams/view/3"><h1><%=@date3_name%>: <%=@day3_date_title %></h1></a> 
+			<%@day3.each do |e|%>
+				<div class='event' id='3_<%=e.id%>'>
+					<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>
+					<div class='all_event_info' id="3_<%=e.id%>_all_events">
+						<div class='user_info'>
+							<%@avatar.each do |av| %>
+								<%if av.user_id ==e.user.id %>
+									<%=image_tag av.profile_pic.url %>
+								<%else %>
+									<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
+								<%end %>
+							<%end %>
+							<p><%= e.user.first_name%> <%=e.user.last_name%></p>
+						</div>
+					
+						<p><%=e.description %></p>
+					</div>
+				</div>
+			<%end %>
+		<%end %>	
+	</div>
+	
+	<div class='day_stream'>
+		<% if @day4.length>0%>
+			<a href="/streams/view/4"><h1><%=@date4_name%>: <%=@day4_date_title %></h1></a>
+			<%@day4.each do |e|%>
+				<div class='event' id='4_<%=e.id%>'>
+					<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>
+					<div class='all_event_info' id="4_<%=e.id%>_all_events">
+						<div class='user_info'>
+							<%@avatar.each do |av| %>
+								<%if av.user_id ==e.user.id %>
+									<%=image_tag av.profile_pic.url %>
+								<%else %>
+									<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
+								<%end %>
+							<%end %>
+							<p><%= e.user.first_name%> <%=e.user.last_name%></p>
+						</div>
+					
+						<p><%=e.description %></p>
+					</div>
+				</div>
+			<%end %>
+		<%end %>	
+	</div>
+	
+	<div class='day_stream'>
+		<% if @day5.length>0%>
+		<a href="/streams/view/5"><h1><%=@date5_name%>: <%=@day5_date_title %></h1></a>
+			<%@day5.each do |e|%>
+				<div class='event' id='5_<%=e.id%>'>
+					<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>
+					<div class='all_event_info' id="5_<%=e.id%>_all_events">
+					<div class='user_info'>
+							<%@avatar.each do |av| %>
+								<%if av.user_id ==e.user.id %>
+									<%=image_tag av.profile_pic.url %>
+								<%else %>
+									<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
+								<%end %>
+							<%end %>
+							<p><%= e.user.first_name%> <%=e.user.last_name%></p>
+						</div>
+					
+						<p><%=e.description %></p>
+				</div>
+				</div>
+			<%end %>
+		<%end %>	
+	</div>
+	
+	<div class='day_stream'>
+		<% if @day6.length>0%>
+		<a href="/streams/view/6"><h1><%=@date6_name%>: <%=@day6_date_title %></h1></a>
+			<%@day6.each do |e|%>
+				<div class='event' id='6_<%=e.id%>'>
+					<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>
+					<div class='all_event_info' id="6_<%=e.id%>_all_events">
+						<div class='user_info'>
+							<%@avatar.each do |av| %>
+								<%if av.user_id ==e.user.id %>
+									<%=image_tag av.profile_pic.url %>
+								<%else %>
+									<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
+								<%end %>
+							<%end %>
+							<p><%= e.user.first_name%> <%=e.user.last_name%></p>
+						</div>
+					
+						<p><%=e.description %></p>
+					</div>
+				</div>
+			<%end %>
+		<%end %>	
+	</div>
+	
+	<div class='day_stream'>
+		<% if @day7.length>0%>
+		<a href="/streams/view/7"><h1><%=@date7_name%>: <%=@day7_date_title %></h1></a>
+			<%@day7.each do |e|%>
+				<div class='event' id='7_<%=e.id%>'>
+					<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>
+					<div class='all_event_info' id="7_<%=e.id%>_all_events">
+						<div class='user_info'>
+							<%@avatar.each do |av| %>
+								<%if av.user_id ==e.user.id %>
+									<%=image_tag av.profile_pic.url %>
+								<%else %>
+									<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
+								<%end %>
+							<%end %>
+							<p><%= e.user.first_name%> <%=e.user.last_name%></p>
+						</div>
+					
+						<p><%=e.description %></p>
+					</div>
+				</div>
+			<%end %>
+		<%end %>	
+	</div>
+	<div id='bottom_container'>
+
+	</div>
+</body>
+</html>

@@ -1,10 +1,71 @@
 <html>
 <head>
 	<title></title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
+<style type="text/css">
+		img{
+			width:300px;
+			height:300px;
+
+		}
+		.event{
+			display:inline-block;
+		}
+		.event a{
+			display:block;
+		}
+		.pic_container{
+			width:610px;
+		}
+
+	</style>
+		<script type="text/javascript">
+		$(document).ready(function(){
+			$('form').submit(function(){
+				$.post($(this).attr('action'),$(this).serialize(),function(data){	
+					//replace form with message
+					if(data.status=="success")
+					{
+						$("#message_"+data.event_id).hide();
+						$("#event_"+data.event_id).html("<p id='message_"+data.event_id+"'>"+data.message+"</p>");
+					}
+					else
+					{
+						$("#message_"+data.event_id).hide();
+						$("#event_"+data.event_id).prepend("<p id='message_"+data.event_id+"'>"+data.message+"</p>");
+					}
+
+				},"json")
+				return false;
+			})
+		})
+	</script>
 </head>
 <body>
-	<a href="">Activity Stream</a>
-	<a href="/friends/find">Find People</a>
+	<div id='nav'>
+		<a href="/homes/calendar">Back</a>
+		<a href="/invitations/send_invitation">Send Invitations</a>
+		<a href="/invitations/sent_invitation">Currently Sent Invitations</a>
+		<a href="/events/confirm">Confirm Event</a>
+	</div>
+	<div id='your_events'>
+		<h1>All Your Events for the Week</h1>
+	<div id='pic_container'>
+		<% @events.each do |e|%>
+		<div class='event' id="event_<%=e.id%>">
+			<%= image_tag e.picture.image.url%>
+			<form action='/events/delete' method='post'>
+				<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+				<input type='hidden' name='event[event_id]' value=<%=e.id %>>
+				<input type='hidden' name='event[user_id]' value=<%=@user.id %>>
+				<input type='submit' value='delete'>
+			</form>
+		</div>	
+		<%end %>
+	</div>
+	
+	</div>
+	
 
 </body>
 </html>

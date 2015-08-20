@@ -1,4 +1,31 @@
 Rails.application.routes.draw do
+  get 'profiles/all'
+
+  get 'profiles/view'
+
+  get 'profiles/index'
+
+  get 'profiles/avatar'
+
+  get 'streams/index'
+
+  get 'streams/all'
+
+  get 'streams/view/:days'=>"streams#view"
+   get 'streams/interact/:event_id'=>"streams#interact"
+
+  get 'friend_requests/new'
+
+  get 'friend_requests/create'
+
+  get 'friend_requests/view'
+
+  get 'friend_requests/all'
+
+  get 'friend_requests/update'
+
+  get 'friend_requests/delete'
+
   get 'chats/all'
 
   get 'chats/view'
@@ -152,9 +179,28 @@ Rails.application.routes.draw do
   match '/pictures/create' => 'pictures#create', :via=>[:get,:post];
   match '/homes/calendar' => 'homes#calendar', :via=>[:get,:post];
   match '/friends/search' => 'friends#search', :via=>[:get,:post];
-  
-     
-
+  match '/friend_requests/create' => "friend_requests#create", :via=>[:get,:post];
+  match '/friend_requests/all' => "friend_requests#all", :via=>[:get,:post];
+  match '/friends/create' => "friends#create", :via=>[:get,:post];
+  match '/circles/create' => "circles#create", :via=>[:get,:post];
+  match '/events/create' => "events#create", :via=>[:get,:post];
+  match '/streams/index' => "streams#index", :via=>[:get,:post];
+  match '/streams/all' => "streams#all", :via=>[:get,:post];
+  match '/likes/create' => "likes#create", :via=>[:get,:post];
+  match '/likes/delete' => "likes#delete", :via=>[:get,:post];
+  match '/joins/create' => "joins#create", :via=>[:get,:post];
+  match '/joins/delete' => "joins#delete", :via=>[:get,:post];
+  match '/invitations/create' => "invitations#create", :via=>[:get,:post];
+  match '/invitations/send_invitation' => "invitations#send_invitation", :via=>[:get,:post];
+  match '/invitations/sent_invitation' => "invitations#sent_invitation", :via=>[:get,:post];
+  match '/events/confirm' => "events#confirm", :via=>[:get,:post];
+  match '/joins/confirm' => "joins#confirm", :via=>[:get,:post];
+  match '/invitations/cancel' => "invitations#cancel", :via=>[:get,:post];
+  match '/events/your_events' => "events#your_events", :via=>[:get,:post];
+  match '/events/delete' => "events#delete", :via=>[:get,:post];
+  match '/profiles/index' => "profiles#index", :via=>[:get,:post];
+  match '/profiles/avatar' => "profiles#avatar", :via=>[:get,:post];
+  match '/profiles/view' => "profiles#view", :via=>[:get,:post];
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

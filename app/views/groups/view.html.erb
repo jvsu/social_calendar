@@ -15,16 +15,16 @@
 	</style>
 </head>
 <body>
-	<a href="">Back</a>
+	<a href="/groups/all">Back</a>
 	<h3><%=@group_name %></h3>
 	<div id='picture_stream'>
 		<% @groups.each do |g|%>
+		<%if g.picture.user.id ==@user.id%>
 			<div class='picutre'>
 				<a href="/pictures/view/<%=g.picture.id%>"><%=image_tag g.picture.image.url %></a>
 			</div>
+		<%end %>
 		<% end%>
 	</div>
-	
-
 </body>
 </html>

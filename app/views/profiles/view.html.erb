@@ -1,0 +1,20 @@
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		img{
+			width:300px;
+			height:300px;
+		}
+
+	</style>
+<body>
+	<h1>Profile Photo</h1>
+	<%if @status=='success' %>
+
+		<%=image_tag @avatar.profile_pic.url %>
+	<%else %>
+		<a href="">Upload Profile Picture</a>
+	<%end%> 
+</body>
+</html>

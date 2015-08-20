@@ -1,18 +1,82 @@
 <html>
 <head>
 	<title></title>
+	<style type="text/css">
+		img{
+			width:300px;
+			height:300px;
+		}
+		#date_nav p{
+			display:inline-block;
+		}
+		#date_nav form{
+			display:inline-block;
+		}
+		.user_info img{
+			width:50px;
+			height:50px;
+			display:inline-block;
+		}
+		.user_info p{
+			display:inline-block;
+			vertical-align:top;
+		}
+		.user_name{
+			text-transform: capitalize;
+		}
+		.event{
+			margin:10px;
+		}
+	</style>
+
 </head>
 <body>
 	 <a href="/users/sign_out" data-method="delete">Log Off</a>
+	 <p>Welcome <%=@user.first_name %> <%=@user.last_name %></p>
 	<div id='menu'>
-		<a href="">Profile</a>
-		<a href="/events/all">Discover</a>
+		<a href="/profiles/index">Profile</a>
+		<a href="/streams/index">Discover</a>
 		<a href="/pictures/new">Pictures</a>
-		<a href="">Events</a>
-		<a href="">Calendar</a>
+		<a href="/events/all">Events</a>
+		<a href="/friend_requests/all">Friends</a>
 	</div>
-	<div id='activities'>
-
+	<div id='date_nav'>
+		<form action='/homes/calendar' action='post'>
+			<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+			<input type='hidden' name='day' value=<%=@day%>>
+			<input type='hidden' name='increment' value=-1>
+			<input type='hidden' name='date_calc' value=<%=@date_calc%>>
+			<input type='submit' value='<'>
+		</form>
+		 <p><%=@day_of_week%></p>
+		 <form action='/homes/calendar' action='post'>
+		 	<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+		 	<input type='hidden' name='day' value=<%=@day%>>
+			<input type='hidden' name='increment' value=1>
+			<input type='hidden' name='date_calc' value=<%=@date_calc%>>
+			<input type='submit' value='>'>
+		 </form>
+	</div>
+	
+	<div id='calendar'>
+		<%@today.each do |t| %>
+			</div class='event'>
+			<h5><%=t.time.strftime("At %I:%M%p") %></h5>
+				<div class='user_info'>
+					<%@avatar.each do |av| %>
+						<%if av.user_id ==t.user.id %>
+							<%=image_tag av.profile_pic.url %>
+						<%else %>
+							<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
+						<%end %>
+					<%end %>
+					<p class='user_name'><%=t.user.user_name %></p>
+				</div>
+				<%=image_tag t.picture.image.url %>
+				<p><%=t.description %></p>
+			</div>
+			
+		<% end%>
 
 	</div>
 </body>

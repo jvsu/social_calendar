@@ -1,0 +1,20 @@
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<h1>All Events</h1>
+	<div id='all_events'>
+		<%@all_events.each do |e|%>
+			<div class='event' id="v_all_events<%=e.id%>">
+				<a href=""><%= image_tag e.picture.image.url%></a>
+				<div class='all_event_info' id="info_v_all_events<%=e.id%>">
+					<p><%= e.user.first_name%> <%=e.user.last_name%></p>
+					<p><%=e.description %></p>
+				</div>
+			</div>
+		<% end%>
+	</div>
+
+</body>
+</html>

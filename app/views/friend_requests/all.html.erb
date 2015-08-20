@@ -1,0 +1,113 @@
+<html>
+<head>
+	<title>Friend Requests</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
+	<script type="text/javascript">
+
+		$(document).ready(function()
+		{	
+			$(".new_circ_name").hide();
+			$('select').change(function(){
+				var select = $(this).find('option:selected').attr('id');
+				if (select[0]=='c') 
+				{
+					var index_1 = select.indexOf("_");
+					var index_2 = select.indexOf("!")
+					var select_id = select.substring(index_1+1,index_2);
+					if(select =="cnewcircle_"+select_id+"!")
+					{
+						$("#nc"+select_id).show();
+					}
+					else
+					{
+						$("#nc"+select_id).hide();
+					}
+				}
+				else if(select[0]=='f')
+				{	
+					var index_1 = select.indexOf("_");
+					var index_2 = select.indexOf("!")
+					var select_id = select.substring(index_1+1,index_2);
+					if(select =="fnewcircle_"+select_id+"!")
+					{
+						$("#nc"+select_id).show();
+					}
+					else
+					{
+						$("#nc"+select_id).hide();
+					}
+				};			
+			})
+		})
+
+	</script>
+
+
+</head>
+<body>
+	<a href="/homes/calendar">Back</a>
+	<% if flash[:message]%>
+		<p><%=flash[:message]%></p>
+	<%end %>
+	<a href="/friends/find">Find Friends</a>
+
+	<h1>Circle Assignments</h1>
+	<div id='circles'>
+		<!-- This adds your requests to a circle -->
+		<% if @circle_length <1%>
+			<p>No Friend Requests</p>
+
+		<%else %>
+				<%@your_requests.each do |r| %>
+				<div class='circ_assign'>
+					<p><%=r.first_name %></p>
+					<p><%= r.last_name %></p>
+					<p><%=r.user_name %></p>
+					<form action='/circles/create' method='post'>
+						<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+						<input type='hidden' name='circle[friend_id]' value="<%=r.id%>">
+						<select name='circle[name]'>
+							<%@circle_names.each do |cn| %>
+								<option id="c<%=cn.delete(' ') %>_<%=r.id%>!" value="<%=cn%>"><%=cn%></option>
+							<% end%>
+						</select>
+						<input type='text' name='circle[new_name]' class='new_circ_name' placeholder='Input Circle Name' id='nc<%=r.id%>'>
+						<input type='hidden' name='circle[user_id]' value=<%=@user.id %>>
+
+						<input type='submit' value='submit'>
+					</form>
+				</div>
+			<% end%>
+		<%end %>
+	</div>
+	<h1>Friend Requests</h1>
+	<div id='friend_requests'>
+		<!-- This is where you decline or confirm -->
+		<%@friend_requests.each do |fr| %>
+		<div class='fr'>
+			<p><%=fr.user.first_name %><%=fr.user.last_name%></p>
+			<form action='/friends/create' method='post'>
+				<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+				<!-- friend request id -->
+				<input type='hidden' name='friend[fr_id]' value=<%=fr.id %>>
+				<input type='hidden' name='friend[requester_id]' value=<%= fr.user_id%>>
+				<input type='hidden' name='friend[confirmer_id]' value=<%=fr.friend_id%>>
+				<!-- Circle Name or New Circle Name -->
+				<select name='friend[name]'>
+					<% @circle_names.each do |cn|%>
+						<option id="f<%=cn.delete(' ') %>_<%=fr.id%>!" value="<%=cn%>"><%=cn%></option>
+					<%end %>
+					<input type='text' name='friend[new_name]' class='new_circ_name' placeholder='Input Circle Name' id='nc<%=fr.id%>'>
+				</select>
+				<input type='submit' value='Confirm Friend'>
+			</form>
+			<a href="">Reject</a>
+		</div>
+			
+			
+
+		<% end%>
+	</div>
+
+</body>
+</html>

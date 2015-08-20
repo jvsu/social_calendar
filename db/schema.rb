@@ -11,10 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150803211836) do
+ActiveRecord::Schema.define(version: 20150820173634) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "avatars", force: true do |t|
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "profile_pic_file_name"
+    t.string   "profile_pic_content_type"
+    t.integer  "profile_pic_file_size"
+    t.datetime "profile_pic_updated_at"
+  end
+
+  add_index "avatars", ["user_id"], name: "index_avatars_on_user_id", using: :btree
 
   create_table "chats", force: true do |t|
     t.text     "message"
@@ -75,9 +87,10 @@ ActiveRecord::Schema.define(version: 20150803211836) do
   create_table "friend_requests", force: true do |t|
     t.integer  "user_id"
     t.integer  "friend_id"
-    t.boolean  "pending"
+    t.boolean  "pending_requester"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "pending_confirmer"
   end
 
   add_index "friend_requests", ["user_id"], name: "index_friend_requests_on_user_id", using: :btree
@@ -88,6 +101,7 @@ ActiveRecord::Schema.define(version: 20150803211836) do
     t.integer  "friend_num"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "confirmed"
   end
 
   add_index "friends", ["circle_id"], name: "index_friends_on_circle_id", using: :btree
@@ -118,6 +132,9 @@ ActiveRecord::Schema.define(version: 20150803211836) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "invitation"
+    t.boolean  "checkin"
+    t.boolean  "confirm"
   end
 
   add_index "joins", ["event_id"], name: "index_joins_on_event_id", using: :btree

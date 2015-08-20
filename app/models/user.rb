@@ -15,6 +15,7 @@ class User < ActiveRecord::Base
     has_many :joins
     has_many :saves
     has_many :invitations
+    has_one :avatars
     has_attached_file :avatar
     validates_attachment_content_type :avatar, :content_type => /\Aimage/
 end

@@ -1,0 +1,23 @@
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		label{
+			display:block;
+			text-transform: capitalize;
+		}
+		input{
+			display:block;
+		}
+	</style>
+</head>
+<body>
+	
+	<%= form_for @avatar, :url =>'/profiles/avatar', :html=>{:multipart=>true} do |f|%>
+		<%= hidden_field_tag("avatar[user_id]", @current_user.id) %>
+		 <%= f.label "Upload Profile Picture" %>
+		<%= f.file_field :profile_pic %>
+	<%= f.submit :submit %>
+	<%end %>
+</body>
+</html>

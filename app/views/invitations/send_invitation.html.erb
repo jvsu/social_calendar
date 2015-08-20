@@ -1,0 +1,78 @@
+<html>
+<head>
+	<title></title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
+	<style type="text/css">
+		img{
+			width:300px;
+			height:300px;
+		}
+		#current_events,#invitations{
+			display:inline-block;
+
+		}
+		#invitations{
+			vertical-align: top;
+			margin-right:100px;
+		}
+		.event a{
+			display:block;
+		}
+		#nav{
+			vertical-align:top;
+			display:block;
+		}
+		#confirm_events{
+			vertical-align: top;
+			display:inline-block;
+			margin-left:50px;
+		}
+	</style>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$(".time").hide();
+
+			$(".set_time").click(function(){
+				var id = $(this).attr('id');
+				var first_index = id.indexOf("_");
+				var bang_index = id.indexOf("!") 
+				event_id = id.substring(first_index+1,bang_index)
+				$("#t_"+event_id).toggle();
+				return false;
+			})
+			//ajax submit sending invitations
+			$('form').submit(function(){
+				$.post($(this).attr('action'),$(this).serialize(),function(data){	
+					//replace form with message
+					$("#e_"+data.event_id).html("<p>"+data.message+"</p>")
+				},"json")
+				return false;
+			})
+		})
+	
+
+	</script>
+</head>
+<body>
+	<div id='invitations'>
+		<h4>Send Invitations</h4>
+		<%@qualified_events.each do |event| %>
+			<div class='event' id="e_<%=event.id %>">
+				<%if event.invitation ==false || event.invitation ==nil %>
+					<%= image_tag event.picture.image.url %>
+					<a href="" id="q_<%=event.id %>!" class='set_time'>Send Invitations</a>
+					<div id='t_<%=event.id %>' class='time'>
+						<form action='/invitations/create' method='post' id="form_<%=event.id %>">
+							<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+							Set Time:<input type='time' name='invitation[time]'>
+							<input type='hidden' name='invitation[event_id]' value=<%= event.id%>>
+							<input type='submit' value='Submit' id="submit_<%=event.id%>">
+						</form>
+					</div>
+				<%end%>
+			</div>
+		<% end%>
+	</div>
+
+</body>
+</html>

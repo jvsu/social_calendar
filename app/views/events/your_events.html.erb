@@ -1,0 +1,46 @@
+<html>
+<head>
+	<title></title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
+	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('form').submit(function(){
+				$.post($(this).attr('action'),$(this).serialize(),function(data){	
+					//replace form with message
+					if(data.status=="success")
+					{
+						$("#message_"+data.event_id).hide();
+						$("#event_"+data.event_id).html("<p id='message_"+data.event_id+"'>"+data.message+"</p>");
+					}
+					else
+					{
+						$("#message_"+data.event_id).hide();
+						$("#event_"+data.event_id).prepend("<p id='message_"+data.event_id+"'>"+data.message+"</p>");
+					}
+
+				},"json")
+				return false;
+			})
+		})
+	</script>
+</head>
+<body>
+	<h1>All Your Events for the Week</h1>
+	<div id='pic_container'>
+		<% @events.each do |e|%>
+		<div class='event' id="event_<%=e.id%>">
+			<%= image_tag e.picture.image.url%>
+			<form action='/events/delete' method='post'>
+				<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+				<input type='hidden' name='event[event_id]' value=<%=e.id %>>
+				<input type='hidden' name='event[user_id]' value=<%=@user.id %>>
+				<input type='submit' value='delete'>
+			</form>
+		</div>	
+		<%end %>
+	</div>
+	
+
+</body>
+</html>

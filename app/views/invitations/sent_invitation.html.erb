@@ -1,0 +1,47 @@
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		img{
+			width:400px;
+			height:400px;
+		}
+	</style>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("form").submit(function(){
+				$.post($(this).attr('action'),$(this).serialize(),function(data){	
+					//replace form with message
+					$("#event_"+data.event_id).html("<p>"+data.message+"</p>")
+				},"json")
+				return false;
+			})
+		})
+
+	</script>
+</head>
+<body>
+	<h1>Sent Invitation</h1>
+	<div id='current_events'>
+		<h4>Currently Sent Invitations</h4>
+		<%@qualified_events.each do |event| %>
+			
+				<%if event.invitation ==true%>
+					<div class='event' id="event_<%=event.id %>">
+						<%= image_tag event.picture.image.url %>
+						<p><%=event.description%></p>
+						<p><%=event.date %> <%=event.time %></p>
+						<form action='/invitations/cancel' method='post'>
+							<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+							<input type='hidden' name='invitation[event_id]' value=<%=event.id %>>
+							<input type='hidden' name='invitation[invitation]' value=<%=false%>>
+							<input type='submit' value='Cancel Event'>
+						</form>
+					</div>
+				<% end%>	
+				
+		<% end%>	
+	</div>
+</body>
+</html>
