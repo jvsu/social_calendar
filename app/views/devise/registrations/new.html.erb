@@ -3,9 +3,23 @@
 <head>
   <title></title>
   <meta name="viewport" content="width=device-width"/>
+  <style type="text/css">
+     h1, h3,form{
+      text-align: center;
+    }
+   
+   a{
+      display:block;
+      text-align:center;
+      margin-top:5px;
+
+    }
+
+  </style>
 </head>
 <body>
-  <h2>Sign up</h2>
+  <h1>Social Calendar</h1>
+  <h3>Sign up</h3>
 
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
   <%= devise_error_messages! %>
@@ -35,7 +49,7 @@
   <div><%= f.label :password_confirmation %><br />
     <%= f.password_field :password_confirmation, autocomplete: "off" %></div>
 
-  <div><%= f.submit "Sign up" %></div>
+  <div><%= f.submit "Sign up", class:"btn btn-info" %></div>
 <% end %>
 
 <%= render "devise/shared/links" %>
