@@ -1,58 +1,6 @@
 class EventsController < ApplicationController
   def all
-  #   @user = current_user
-  #   #Get events that meet the threshold. 
-  #   @qualified_events = []
-  #   #get events that belong to the user
-  #   date = DateTime.now
-  #   day = date.strftime("%d") #day
-  #   year = date.strftime("%Y") #year
-  #   month = date.strftime("%m") #month
-  #   datetime = "#{year}-#{month}-#{day}"
 
-  # #need to organize it based on days
-  #   day = day.to_i #turn day into int
-  #    #all events for the week
-  #   upper_range_day = day +7
-  #   upper_range_day = upper_range_day.to_s #convert it to string
-  #   upper_range = "#{year}-#{month}-#{upper_range_day}"          #create the date
-    
-  #   # All events for the last 7 days
-  #   events = Event.all.where(date:datetime..upper_range,user_id:@user.id)
-  #   emetrics = Emetric.all
-  #   emetric_collection =[]
-  #   #get emetrics that belong to the queried events
-  #   emetrics.each do |e|
-  #     events.each do |event|
-  #       if e.event_id ==event.id
-  #         emetric_collection.push(e)
-  #       end
-  #     end
-  #   end
-  #   # now put into the @qaulified_events array all the records where the join threshold is met
-
-  #  events.each do |event|
-  #     emetric_collection.each do |e|
-  #       if e.event_id == event.id && e.join_num >= event.join_threshold 
-  #           @qualified_events.push(event)
-  #       end
-  #     end
-  #   end
-
-  #   #events for you said you would join and now need to confirm. 
-  #   joins = Join.all.where(user_id:@user.id)
-  #   inv_events = Event.all.where(date:datetime..upper_range,invitation:true)
-  #   @invitations = []
-
-  #   joins.each do |join|
-  #     inv_events.each do |i| 
-  #         if join.event_id == i.id  # if the event_id doesn't exist on the invitation table
-  #           if join.confirm ==nil || join.confirm=='false'
-  #             @invitations.push(join) 
-  #           end
-  #         end
-  #     end
-  #   end
    @user = current_user
     #Get events that meet the threshold. 
     @qualified_events = []
@@ -67,11 +15,43 @@ class EventsController < ApplicationController
     day = day.to_i #turn day into int
      #all events for the week
     upper_range_day = day +7
-    upper_range_day = upper_range_day.to_s #convert it to string
-    upper_range = "#{year}-#{month}-#{upper_range_day}"          #create the date
+    if month =='02' && upper_range_day>28 # if it's feburary and we want days beyond feburary
+      days = upper_range_day - 28 # days inton the next month
+      day_string = days.to_s
+      upper_range = "#{year}-03-#{day_string}"
+
+    elsif month=='12' && upper_range_day >31
+      year_int = year.to_i
+      new_year = year_int +1
+      days = upper_range_day - 31
+      days = days.to_s
+      upper_range = "#{new_year}-01-#{days}"
+
+    elsif upper_range_day >30 # we aren't dealing with the special months
+      if month =='04' || month=='06' || month =='09' || month=='11'
+        month_int = month.to_i
+        new_month = month_int +1
+        days = upper_range_day -30
+        days = days.to_s
+        upper_range = "#{year}-#{new_month}-#{days}"
+      else
+        month_int = month.to_i
+        new_month = month_int +1
+        days = upper_range_day -31
+        days = days.to_s
+        upper_range = "#{year}-#{new_month}-#{days}"
+
+      end
+    else
+     upper_range_day = upper_range_day.to_s #convert it to string
+      upper_range = "#{year}-#{month}-#{upper_range_day}"          #create the date 
+    end
+
+    # upper_range_day = upper_range_day.to_s #convert it to string
+    # upper_range = "#{year}-#{month}-#{upper_range_day}"          #create the date
     
     # All events for the last 7 days
-    @events = Event.all.where(date:datetime..upper_range,user_id:@user.id)
+    @events = Event.all.where(date:datetime..upper_range,user_id:@user.id).order(date: :asc)
   end
 
   def view
@@ -105,9 +85,40 @@ class EventsController < ApplicationController
     day = day.to_i #turn day into int
      #all events for the week
     upper_range_day = day +7
-    upper_range_day = upper_range_day.to_s #convert it to string
-    upper_range = "#{year}-#{month}-#{upper_range_day}"          #create the date
-    
+    # upper_range_day = upper_range_day.to_s #convert it to string
+    # upper_range = "#{year}-#{month}-#{upper_range_day}"          #create the date
+    if month =='02' && upper_range_day>28 # if it's feburary and we want days beyond feburary
+      days = upper_range_day - 28 # days inton the next month
+      day_string = days.to_s
+      upper_range = "#{year}-03-#{day_string}"
+
+    elsif month=='12' && upper_range_day >31
+      year_int = year.to_i
+      new_year = year_int +1
+      days = upper_range_day - 31
+      days = days.to_s
+      upper_range = "#{new_year}-01-#{days}"
+
+    elsif upper_range_day >30 # we aren't dealing with the special months
+      if month =='04' || month=='06' || month =='09' || month=='11'
+        month_int = month.to_i
+        new_month = month_int +1
+        days = upper_range_day -30
+        days = days.to_s
+        upper_range = "#{year}-#{new_month}-#{days}"
+      else
+        month_int = month.to_i
+        new_month = month_int +1
+        days = upper_range_day -31
+        days = days.to_s
+        upper_range = "#{year}-#{new_month}-#{days}"
+
+      end
+    else
+     upper_range_day = upper_range_day.to_s #convert it to string
+      upper_range = "#{year}-#{month}-#{upper_range_day}"          #create the date 
+    end
+
 
     joins = Join.all.where(user_id:@user.id)
     inv_events = Event.all.where(date:datetime..upper_range,invitation:true)

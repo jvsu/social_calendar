@@ -12,11 +12,82 @@
 		 #likes, #joins{
 			display:inline-block;
 		}
+		#comments{
+			display:inline-block;
+		}
+		#user_info img{
+			width:40px;
+			height:40px;
+			display:inline-block;
+			margin:10px;
+		}
+		#user_info p{
+			display:inline-block;
+			text-transform: capitalize;
+		}
+		h1{
+			width:600px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		#event{
+			width:750px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		img{
+			width:500px;
+			height:500px;
+		}
+		#interactions{
+			width:700px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		#description{
+			margin-left: 50px;
+			font-size:15px;
+			text-align: center;
 
+		}
+		.name{
+			font-size:22px;
+			display:block;
+		}
+		#join_title{
+			margin-left:150px;
+			font-weight:bold;
+		}
+		#join_metric{
+			margin-left:180px;
+			font-weight: bold;
+			font-size:25;
+		}
+		#buttons{
+			width:500px;
+			margin-left:auto;
+			margin-right:auto;
+			margin-top:10px;
+		}
+		#buttons form, #buttons a{
+			display:inline-block;
+		}
+		#back{
+			float:right;
+			margin-right:100px;
+		}
+		.namedate{
+			display:inline-block;
+		}
+		#event_info{
+			width:350px;
+			white-space: normal;
+			word-wrap: break-word;
+		}
 
 	</style>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> 
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$("#new_group").hide();
@@ -34,16 +105,75 @@
 				}
 			})
 
-			$("#save").click(function(){
+		$("#save").click(function(){
 				$("#save_form").toggle();
 			})
+		
+		$("#like_post").on("submit",function(){
+			$.post($(this).attr('action'),$(this).serialize(),function(data){
+				if(data.message =="success")
+				{
+					$("#likes").html("<form action='/likes/delete' method='post' id='unlike_post'><input name='authenticity_token' value='<%= form_authenticity_token %>' type='hidden'><input type='hidden' name='like[user_id]' value="+data.user_id+"><input type='hidden' name='like[event_id]' value="+data.event_id+"><input type='submit' value='UnLike' id='unlike_button' class='btn btn-primary'></form>")
+				}
+				else
+				{
+					alert("Error");
+				}
+			},"json")
+			return false; 
 		})
+
+	$("#unlike_post").on("submit",function(){
+		$.post($(this).attr('action'),$(this).serialize(),function(data){
+			if(data.message =="success")
+			{
+				$("#likes").html("<form action='/likes/create' method='post' id='like_post'><input name='authenticity_token' value='<%= form_authenticity_token %>' type='hidden'><input type='hidden' name='like[user_id]' value="+data.user_id+"><input type='hidden' name='like[event_id]' value="+data.event_id+"><input type='submit' value='Like' id='like_button' class='btn btn-primary'></form>");
+			}
+			else
+			{
+				alert("still like");
+			}	
+		},"json");
+		return false;
+	})	
+
+	$("#new_join").on("submit",function(){
+		$.post($(this).attr('action'),$(this).serialize(),function(data){	
+			if(data.message=='success')
+			{
+				$("#joins").html("<form action='/joins/delete' method='post' id='unjoin'><input name='authenticity_token' value='<%= form_authenticity_token %>' type='hidden'><input type='hidden' name='join[user_id]' value="+data.user_id+"><input type='hidden' name='join[event_id]' value="+data.event_id+"><input type='submit' value='UnJoin' class='btn btn-primary' ></form>");
+				$("#join_metric").html("<p id='join_metric'>"+data.join_num+"/"+data.join_threshold+"</p>")
+			}	
+			else
+			{
+				alert("error")
+			}
+			
+		},"json");
+		return false;
+	})
+
+	$("#unjoin").on("submit",function(){
+		$.post($(this).attr('action'),$(this).serialize(),function(data){	
+			if(data.message=='success')
+			{
+				$("#joins").html("<form action='/joins/create' method='post' id='new_join'><input name='authenticity_token' value='<%= form_authenticity_token %>' type='hidden'><input type='hidden' name='join[user_id]' value="+data.user_id+"><input type='hidden' name='join[event_id]' value="+data.event_id+"><input type='submit' value='Join' class='btn btn-primary'></form>");
+				$("#join_metric").html("<p id='join_metric'>"+data.join_num+"/"+data.join_threshold+"</p>")
+			}	
+			else
+			{
+				alert("error")
+			}
+		},"json");
+		return false;
+	})
+})
 	// Dynamic Like Button
 	$(document).on("submit","#like_post",function(){
 		$.post($(this).attr('action'),$(this).serialize(),function(data){
 			if(data.message =="success")
 			{
-				$("#likes").html("<form action='/likes/delete' method='post' id='unlike_post'><input name='authenticity_token' value='<%= form_authenticity_token %>' type='hidden'><input type='hidden' name='like[user_id]' value="+data.user_id+"><input type='hidden' name='like[event_id]' value="+data.event_id+"><input type='submit' value='UnLike' id='unlike_button'></form>")
+				$("#likes").html("<form action='/likes/delete' method='post' id='unlike_post'><input name='authenticity_token' value='<%= form_authenticity_token %>' type='hidden'><input type='hidden' name='like[user_id]' value="+data.user_id+"><input type='hidden' name='like[event_id]' value="+data.event_id+"><input type='submit' value='UnLike' id='unlike_button' class='btn btn-primary'></form>")
 			}
 			else
 			{
@@ -57,7 +187,7 @@
 		$.post($(this).attr('action'),$(this).serialize(),function(data){
 			if(data.message =="success")
 			{
-				$("#likes").html("<form action='/likes/create' method='post' id='like_post'><input name='authenticity_token' value='<%= form_authenticity_token %>' type='hidden'><input type='hidden' name='like[user_id]' value="+data.user_id+"><input type='hidden' name='like[event_id]' value="+data.event_id+"><input type='submit' value='Like' id='like_button'></form>");
+				$("#likes").html("<form action='/likes/create' method='post' id='like_post'><input name='authenticity_token' value='<%= form_authenticity_token %>' type='hidden'><input type='hidden' name='like[user_id]' value="+data.user_id+"><input type='hidden' name='like[event_id]' value="+data.event_id+"><input type='submit' value='Like' id='like_button' class='btn btn-primary'></form>");
 			}
 			else
 			{
@@ -71,9 +201,8 @@
 		$.post($(this).attr('action'),$(this).serialize(),function(data){	
 			if(data.message=='success')
 			{
-				$("#joins").html("<form action='/joins/delete' method='post' id='unjoin'><input name='authenticity_token' value='<%= form_authenticity_token %>' type='hidden'><input type='hidden' name='join[user_id]' value="+data.user_id+"><input type='hidden' name='join[event_id]' value="+data.event_id+"><input type='submit' value='UnJoin' ></form>");
-				$("#join_metric").hide();
-				$("#info").append("<p id='join_metric'>"+data.join_num+"/"+data.join_threshold+"</p>")
+				$("#joins").html("<form action='/joins/delete' method='post' id='unjoin'><input name='authenticity_token' value='<%= form_authenticity_token %>' type='hidden'><input type='hidden' name='join[user_id]' value="+data.user_id+"><input type='hidden' name='join[event_id]' value="+data.event_id+"><input type='submit' value='UnJoin' class='btn btn-primary' ></form>");
+				$("#join_metric").html("<p id='join_metric'>"+data.join_num+"/"+data.join_threshold+"</p>")
 			}	
 			else
 			{
@@ -88,7 +217,8 @@
 		$.post($(this).attr('action'),$(this).serialize(),function(data){	
 			if(data.message=='success')
 			{
-				$("#joins").html("<form action='/joins/create' method='post' id='new_join'><input name='authenticity_token' value='<%= form_authenticity_token %>' type='hidden'><input type='hidden' name='join[user_id]' value="+data.user_id+"><input type='hidden' name='join[event_id]' value="+data.event_id+"><input type='submit' value='Join'></form>");
+				$("#joins").html("<form action='/joins/create' method='post' id='new_join'><input name='authenticity_token' value='<%= form_authenticity_token %>' type='hidden'><input type='hidden' name='join[user_id]' value="+data.user_id+"><input type='hidden' name='join[event_id]' value="+data.event_id+"><input type='submit' value='Join' class='btn btn-primary'></form>");
+				$("#join_metric").html("<p id='join_metric'>"+data.join_num+"/"+data.join_threshold+"</p>")
 			}	
 			else
 			{
@@ -101,67 +231,75 @@
 
 	</script>
 </head>
+
 <body>
-
-	<%if flash[:message]%>
-		<p><%= flash[:message]%></p>
-	<% end%>
+	<a href="/streams/index" id='back'>Back</a>
+	<h1>Social Calendar</h1>
 	<div id='event'>
-		<div id='title'>
-			<p><%= @event.user.first_name%> <%=@event.user.last_name%></p>
-
-		</div>
+		
 		<%= image_tag @event.picture.image.url%>
 	</div>
 	<div id='interactions'>
 		<div id='info'>
-			<p><%=@event.date %> <%=@event.description %></p>
-			<p>Join Threshold </p>
-			<p id='join_metric'><%=@emetrics.join_num %>/<%=@join_threshold %></p>
-		</div>
-	
+			<div id='user_info'>
+				<%if @event.user.avatar.blank?%>
+						<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
+				<%else %>
+						<%=image_tag @event.user.avatar.url %>
+				<% end%>
+				<div class='namedate'>
+					<p class='name'><%= @event.user.first_name%> <%=@event.user.last_name%></p>
+					<p><%=@event.date.strftime("%A") %> <%=@event.date.strftime("%m-""%d-""%Y") %></p>
+				</div>	
+			</div>
+			<div id='event_info' >
+				<p id='description'> <%=@event.description %></p>
+				<p id='join_title'>Join Threshold </p>
+				<p id='join_metric'><%=@emetrics.join_num %>/<%=@join_threshold %></p>
+			</div>
 
-		<div id='likes'>
-			<%if @status=="no_likes" %>
-				<form action='/likes/create' method='post' id='like_post'>
-					<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-					<input type='hidden' name='like[user_id]' value=<%= @user.id%>>
-					<input type='hidden' name='like[event_id]' value=<%= @event.id%>>
-					<input type='submit' value='Like' id='like_button'>
-				</form>
+			<div id='buttons'>
+				<div id='likes'>
+				<%if @status=="no_likes" %>
+					<form action='/likes/create' method='post' id='like_post'>
+						<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+						<input type='hidden' name='like[user_id]' value=<%= @user.id%>>
+						<input type='hidden' name='like[event_id]' value=<%= @event.id%>>
+						<input type='submit' value='Like' id='like_button' class="btn btn-primary">
+					</form>
 
-			<%else %>
-				<form action='/likes/delete' method='post' id='unlike_post'>
-					<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-					<input type='hidden' name='like[user_id]' value=<%= @user.id%>>
-					<input type='hidden' name='like[event_id]' value=<%= @event.id%>>
-					<input type='submit' value='UnLike' id='unlike_button'>
-				</form>
-			<%end %>
-		</div>
-		<div id='joins'>
-			<%if @join_status =='no_join'%>
-				<form action='/joins/create' method='post' id='new_join'>
-					<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-					<input type='hidden' name='join[user_id]' value=<%= @user.id%>>
-					<input type='hidden' name='join[event_id]' value=<%= @event.id%>>
-					<input type='submit' value='Join'>
-				</form>
-			<% else%>
-				<form action='/joins/delete' method='post' id='unjoin'>
-					<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-					<input type='hidden' name='join[user_id]' value=<%= @user.id%>>
-					<input type='hidden' name='join[event_id]' value=<%= @event.id%>>
-					<input type='submit' value='UnJoin'>
-				</form>
-			<% end%>
+				<%else %>
+					<form action='/likes/delete' method='post' id='unlike_post'>
+						<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+						<input type='hidden' name='like[user_id]' value=<%= @user.id%>>
+						<input type='hidden' name='like[event_id]' value=<%= @event.id%>>
+						<input type='submit' value='UnLike' id='unlike_button' class="btn btn-primary">
+					</form>
+				<%end %>
+			</div>
+			<div id='joins'>
+				<%if @join_status =='no_join'%>
+					<form action='/joins/create' method='post' id='new_join'>
+						<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+						<input type='hidden' name='join[user_id]' value=<%= @user.id%>>
+						<input type='hidden' name='join[event_id]' value=<%= @event.id%>>
+						<input type='submit' value='Join' class="btn btn-primary">
+					</form>
+				<% else%>
+					<form action='/joins/delete' method='post' id='unjoin'>
+						<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+						<input type='hidden' name='join[user_id]' value=<%= @user.id%>>
+						<input type='hidden' name='join[event_id]' value=<%= @event.id%>>
+						<input type='submit' value='UnJoin' class="btn btn-primary">
+					</form>
+				<% end%>
+			</div>
+			<div id='comments'>
+				<a href="/chats/all/<%=@event.id%>" class='btn btn-primary'>Chat</a>
+			</div>
 		</div>
 	</div>
-	<div id='comments'>
 
-
-	</div>
-	
 
 </body>
 </html>

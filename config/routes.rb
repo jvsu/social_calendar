@@ -26,7 +26,7 @@ Rails.application.routes.draw do
 
   get 'friend_requests/delete'
 
-  get 'chats/all'
+  get 'chats/all/:event_id'=>"chats#all"
 
   get 'chats/view'
 
@@ -36,7 +36,7 @@ Rails.application.routes.draw do
 
   get 'chats/update'
 
-  get 'chats/delete'
+  get 'chats/delete/:chat_id'=>"chats#delete"
 
   get 'invitations/all'
 
@@ -201,6 +201,8 @@ Rails.application.routes.draw do
   match '/profiles/index' => "profiles#index", :via=>[:get,:post];
   match '/profiles/avatar' => "profiles#avatar", :via=>[:get,:post];
   match '/profiles/view' => "profiles#view", :via=>[:get,:post];
+  match '/profiles/update' => "profiles#update", :via=>[:get,:post];
+ match '/chats/create' => "chats#create", :via=>[:get,:post];
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -1,3 +1,5 @@
+require 'json' 
+
 class LikesController < ApplicationController
   def all
   end

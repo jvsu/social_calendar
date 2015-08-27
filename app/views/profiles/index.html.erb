@@ -1,6 +1,7 @@
 <html>
 <head>
 	<title></title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
 	<style type="text/css">
 		label{
 			display:block;
@@ -9,15 +10,51 @@
 		input{
 			display:block;
 		}
+		img{
+			width:200px;
+			height:200px;
+			 border: none;
+    		display: block;
+    		margin: 0 auto;
+		}
+		#navigation{
+			text-align: center;
+			margin-top:15px;
+		}
+		h1{
+			text-align: center;
+			margin-top:10px;
+		}
+		h3, h5{
+			text-align: center;
+			text-transform: capitalize;
+		}
+
+		
 	</style>
+	
 </head>
 <body>
+	<a href="/homes/calendar">Back</a>
+
+	<h1>Social Calendar</h1>
+	<%if @user.avatar.blank?%>
+		<h3><%=@user.first_name %> <%=@user.last_name %></h3>
+		<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
+		<h5><%=@user.user_name %></h5>
+	<%else %>
+		<h3><%=@user.first_name %> <%=@user.last_name %></h3>
+		<%=image_tag @user.avatar.url %>
+		<h5><%=@user.user_name %></h5>
+	<% end%> 
+	<div id='navigation'>
+		<a href="/users/edit" class="btn btn-info">Edit Profile</a>
+		<a href="" class="btn btn-info">Manage Circles</a>
+		<a href="" class="btn btn-info">Friends</a>
+	</div>
+
 	
-	<%= form_for @avatar, :url =>'/profiles/avatar', :html=>{:multipart=>true} do |f|%>
-		<%= hidden_field_tag("avatar[user_id]", @current_user.id) %>
-		 <%= f.label "Upload Profile Picture" %>
-		<%= f.file_field :profile_pic %>
-	<%= f.submit :submit %>
-	<%end %>
+	
+
 </body>
 </html>

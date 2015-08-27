@@ -4,6 +4,7 @@ class HomesController < ApplicationController
 
     @user = current_user
     @avatar = Avatar.all
+    @pic_confirmed = false
     # Get your confirmed joins
     joins = Join.all.where(confirm:true,user_id:@user.id)
     # put event ids in this array 
@@ -12,10 +13,10 @@ class HomesController < ApplicationController
     joins.each do |j|
       event_ids.push(j.event_id)
     end
-
+    event_ids = event_ids.uniq
     # find events where you sent out invitations out for today
       invitations = Event.all.where(invitation:true, user_id:@user.id)
-      
+      @confirms = Join.all.where(confirm:true)
       #put ids into the event_ids
       invitations.each do |i|
         event_ids.push(i.id)

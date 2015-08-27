@@ -10,17 +10,37 @@
 			display:inline-block;
 		}
 		#picture_stream{
-			width:710px;
+			margin:15px;
+		}
+		h1{
+		width:600px;
+		margin-left:auto;
+		margin-right:auto;
+		}
+		#back{
+			float:right;
+			margin-right:100px;
+		}
+		#group_name{
+			text-transform: capitalize;
+		}
+		.picture{
+			margin:10px;
+			display:inline-block;
+		}
+		h3{
+			margin-left:15px;
 		}
 	</style>
 </head>
 <body>
-	<a href="/groups/all">Back</a>
-	<h3><%=@group_name %></h3>
+	<a href="/groups/all" id='back'>Back</a>
+	<h1>Social Calendar</h1>
+	<h3 id='group_name'><%=@group_name %></h3>
 	<div id='picture_stream'>
 		<% @groups.each do |g|%>
 		<%if g.picture.user.id ==@user.id%>
-			<div class='picutre'>
+			<div class='picture'>
 				<a href="/pictures/view/<%=g.picture.id%>"><%=image_tag g.picture.image.url %></a>
 			</div>
 		<%end %>

@@ -20,6 +20,8 @@ class FriendRequestsController < ApplicationController
   def all
     @user = current_user
 
+    @avatar = Avatar.all
+    @pic = false
     #circle Assignments
     your_circles = Circle.all.where(user_id:@user.id)
     circle_names =["uncategorized","new circle"]
@@ -44,6 +46,8 @@ class FriendRequestsController < ApplicationController
 
     #friend requests
     @friend_requests = FriendRequest.all.where(friend_id:@user.id,pending_confirmer:true)
+    @friend_requests_length = @friend_requests.length
+    
     
   end
 

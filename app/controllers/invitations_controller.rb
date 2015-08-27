@@ -16,7 +16,7 @@ class InvitationsController < ApplicationController
       initation_update = Event.find(event_params[:event_id]).update(invitation:true)
       json_data = {message:"Invitations Sent",event_id:event_params[:event_id]}
       render json:json_data
-
+      
   end
 
   def update
@@ -37,9 +37,43 @@ class InvitationsController < ApplicationController
     day = day.to_i #turn day into int
      #all events for the week
     upper_range_day = day +7
-    upper_range_day = upper_range_day.to_s #convert it to string
-    upper_range = "#{year}-#{month}-#{upper_range_day}"          #create the date
+    # upper_range_day = upper_range_day.to_s #convert it to string
+    # upper_range = "#{year}-#{month}-#{upper_range_day}"          #create the date
     
+    if month =='02' && upper_range_day>28 # if it's feburary and we want days beyond feburary
+      days = upper_range_day - 28 # days inton the next month
+      day_string = days.to_s
+      upper_range = "#{year}-03-#{day_string}"
+
+    elsif month=='12' && upper_range_day >31
+      year_int = year.to_i
+      new_year = year_int +1
+      days = upper_range_day - 31
+      days = days.to_s
+      upper_range = "#{new_year}-01-#{days}"
+
+    elsif upper_range_day >30 # we aren't dealing with the special months
+      if month =='04' || month=='06' || month =='09' || month=='11'
+        month_int = month.to_i
+        new_month = month_int +1
+        days = upper_range_day -30
+        days = days.to_s
+        upper_range = "#{year}-#{new_month}-#{days}"
+      else
+        month_int = month.to_i
+        new_month = month_int +1
+        days = upper_range_day -31
+        days = days.to_s
+        upper_range = "#{year}-#{new_month}-#{days}"
+
+      end
+    else
+     upper_range_day = upper_range_day.to_s #convert it to string
+      upper_range = "#{year}-#{month}-#{upper_range_day}"          #create the date 
+    end
+
+
+
     # All events for the last 7 days
     events = Event.all.where(date:datetime..upper_range,user_id:@user.id)
     emetrics = Emetric.all
@@ -94,8 +128,41 @@ class InvitationsController < ApplicationController
     day = day.to_i #turn day into int
      #all events for the week
     upper_range_day = day +7
-    upper_range_day = upper_range_day.to_s #convert it to string
-    upper_range = "#{year}-#{month}-#{upper_range_day}"          #create the date
+    # upper_range_day = upper_range_day.to_s #convert it to string
+    # upper_range = "#{year}-#{month}-#{upper_range_day}"          #create the date
+
+    if month =='02' && upper_range_day>28 # if it's feburary and we want days beyond feburary
+      days = upper_range_day - 28 # days inton the next month
+      day_string = days.to_s
+      upper_range = "#{year}-03-#{day_string}"
+
+    elsif month=='12' && upper_range_day >31
+      year_int = year.to_i
+      new_year = year_int +1
+      days = upper_range_day - 31
+      days = days.to_s
+      upper_range = "#{new_year}-01-#{days}"
+
+    elsif upper_range_day >30 # we aren't dealing with the special months
+      if month =='04' || month=='06' || month =='09' || month=='11'
+        month_int = month.to_i
+        new_month = month_int +1
+        days = upper_range_day -30
+        days = days.to_s
+        upper_range = "#{year}-#{new_month}-#{days}"
+      else
+        month_int = month.to_i
+        new_month = month_int +1
+        days = upper_range_day -31
+        days = days.to_s
+        upper_range = "#{year}-#{new_month}-#{days}"
+
+      end
+    else
+     upper_range_day = upper_range_day.to_s #convert it to string
+      upper_range = "#{year}-#{month}-#{upper_range_day}"          #create the date 
+    end
+
     
     # All events for the last 7 days
     events = Event.all.where(date:datetime..upper_range,user_id:@user.id)

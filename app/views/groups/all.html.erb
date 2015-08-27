@@ -5,17 +5,44 @@
 	.group h3{
 		text-transform: capitalize;
 	}
+	h1{
+		width:600px;
+		margin-left:auto;
+		margin-right:auto;
+	}
+	.group{
+		border:1px solid black;
+		height:300px;
+		width:300px;
+		display:inline-block;
+		margin:10px;
+	}
+	.group h3{
+		text-align: center;
+		vertical-align: middle;
+		line-height: 200px;
+	}
+	h2{
+		margin-left:25px;
+	}
+	#back{
+			float:right;
+			margin-right:100px;
+		}
 
 	</style>
 </head>
 <body>
-	<a href="/pictures/new">Back</a>
-	<h3>Groups</h3>
-	<%@groups.each do |g| %>
-		<div class='group'>
-			<h3><a href="/groups/view/<%=g%>"><%=g%></a></h3>
-		</div>
-	<%end %>
-
+	<a href="/pictures/new" id='back'>Back</a>
+	<h1>Social Calendar</h1>
+	<h2>Groups:</h2>
+	<div id=''>
+		<%@groups.each do |g| %>
+			<div class='group'>
+				<h3><a href="/groups/view/<%=g%>"><%=g%></a></h3>
+			</div>
+		<%end %>
+	</div>
+	
 </body>
 </html>

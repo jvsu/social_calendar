@@ -6,6 +6,35 @@
 			width:400px;
 			height:400px;
 		}
+		h1{
+			width:600px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		#back{
+			float:right;
+			margin-right:100px;
+		}
+		.event{
+			display:inline-block;
+			margin:5px;
+		}
+		.timedate{
+			font-weight: bold;
+			margin-left:auto;
+			margin-right:auto;
+			width:220px;
+
+		}
+		.description{
+			width:200px;
+			margin-left:auto;
+			margin-right:auto;
+			display:block;
+		}
+		.btn.btn-danger{
+			width:400px;
+		}
 	</style>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
 	<script type="text/javascript">
@@ -22,21 +51,23 @@
 	</script>
 </head>
 <body>
-	<h1>Sent Invitation</h1>
+	<a href="/events/all" id='back'>Back</a>
+	<h1>Social Calendar</h1>
 	<div id='current_events'>
 		<h4>Currently Sent Invitations</h4>
 		<%@qualified_events.each do |event| %>
 			
 				<%if event.invitation ==true%>
 					<div class='event' id="event_<%=event.id %>">
-						<%= image_tag event.picture.image.url %>
-						<p><%=event.description%></p>
-						<p><%=event.date %> <%=event.time %></p>
+						<a href="/chats/all/<%=event.id %>"><%= image_tag event.picture.image.url %></a>
+						<p class='timedate'><%=event.date.strftime("%A") %> <%=event.date.strftime("%m-%d-%Y") %> <%=event.time.strftime('%l:%M%p') %></p>
+						<p class='description'><%=event.description%></p>
+						
 						<form action='/invitations/cancel' method='post'>
 							<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
 							<input type='hidden' name='invitation[event_id]' value=<%=event.id %>>
 							<input type='hidden' name='invitation[invitation]' value=<%=false%>>
-							<input type='submit' value='Cancel Event'>
+							<input type='submit' value='Cancel Event' class='btn btn-danger'>
 						</form>
 					</div>
 				<% end%>	

@@ -3,12 +3,76 @@
 	<title></title>
 	<style type="text/css">
 		img{
-			width:350px;
-			height:400px;
+			width:600px;
+			height:500px;
+			margin-right: auto;
+			margin-left:auto;
+			display:block;
+			margin-top:10px;
 		}
 		input{
 			display:block;
 		}
+		h1{
+			width:400px;
+			margin-left:auto;
+			margin-right:auto;
+			margin-bottom:15px;
+		}
+		#back{
+			float:right;
+			margin-right:100px;
+		}
+		h3{
+			width:400px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		form{
+			width:350px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		#description{
+			height:35px;
+			width:300px;
+			margin-bottom: 10px;
+		}
+		#join_threshold{
+			height:35px;
+			width:60px;
+			margin-left:30px;
+		}
+		#jt{
+			display:inline-block;
+			margin-left:15px;
+			font-weight: bold;
+		}
+		#date{
+			margin-top: 10px;
+			height:35px;
+			width:200px;
+			margin-bottom: 10px;
+			display:inline-block;
+			margin-left:15px;
+		}
+		#event_date_title{
+			display:inline-block;
+			margin-left:15px;
+			font-weight: bold;
+		}
+		#circles{
+			height:35px;
+			width:200px;
+			margin-left:30px;
+			text-transform: capitalize;
+		}
+		.btn.btn-success{
+			margin-top:15px;
+			display:block;
+			margin-left:100px;
+		}
+	
 	</style>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script type="text/javascript">
@@ -24,32 +88,36 @@
 	</script>
 </head>
 <body>
-	<a href="/groups/view/<%=@group[0][:name]%>">Back</a>
-	<h2>Social Calendar</h2>
+	<a href="/groups/view/<%=@group[0][:name]%>" id='back'>Back</a>
+	<h1>Social Calendar</h1>
 	<div id='message'>
 
 	</div>
 	<%= image_tag @picture.image.url %>
-	<a href="/events/new/<%=@picture.id%>">Share</a>
 	<div>
+		<h3>Share</h3>
 		<form action='/events/create' method='post' id='new_event'>
 			<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-			<input type='text' name='event[description]' placeholder='description'>
-			Join Threshold
-			<select name='event[join_threshold]'>
+			<input type='text' name='event[description]' placeholder='Description' id='description'>
+			 <p id='jt'>Join Threshold</p>
+			<select name='event[join_threshold]' id='join_threshold'>
 				<% for i in 1..30%>
 					<option  value=<%=i%>><%=i%></option>
 				<% end%>
 			</select>
-			<input type='date' name='event[date]'>
-			<select name='event[circle_id]'>
+			<div>
+				<p id='event_date_title'>Event Date</p>
+				<input type='date' name='event[date]' id='date'>
+			</div>
+			
+			<select name='event[circle_id]' id='circles'>
 				<% @circles.each do |c|%>
-					<option value='<%= c.id%>'><%=c.name %></option>
+					<option value='<%= c.id%>' class='circle_options'><%=c.name %></option>
 				<%end %>
 			</select>
 			<input type='hidden' name='event[user_id]' value=<%=@user.id %>>
 			<input type='hidden' name='event[picture_id]' value=<%=@picture.id %>>
-			<input type='submit' value='Submit'>
+			<input type='submit' value='Submit' class='btn btn-success'>
 		</form>
 	</div>
 </body>	

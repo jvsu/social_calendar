@@ -12,7 +12,7 @@
 						if(data.status=='Friend Request')
 						{
 							//puts form out for friend request
-							$("#request").html("<form action='/friend_requests/create' method='post' id='friend_request'>"+"<input name='authenticity_token' value='<%= form_authenticity_token %>' type='hidden'><input id='fr_friend_id' type='hidden' name='friend[friend_id]' value="+data.friend_id+"><input id='fr_user_id' type='hidden' name='friend[user_id]' value="+data.current_user_id+"><input id='fr_pending' type='hidden' name='friend[pending_requester]' value=true><input type='hidden' name='friend[pending_confirmer]' value=true></div></select><input type='Submit' value='Send Friend Request' id='friend_sub'></form>");
+							$("#request").html("<form action='/friend_requests/create' method='post' id='friend_request'>"+"<input name='authenticity_token' value='<%= form_authenticity_token %>' type='hidden'><input id='fr_friend_id' type='hidden' name='friend[friend_id]' value="+data.friend_id+"><input id='fr_user_id' type='hidden' name='friend[user_id]' value="+data.current_user_id+"><input id='fr_pending' type='hidden' name='friend[pending_requester]' value=true><input type='hidden' name='friend[pending_confirmer]' value=true></div></select><input type='Submit' value='Send Friend Request' id='friend_sub' class='btn btn-info'></form>");
 						}
 						else if(data.status=='Pending')
 						{
@@ -20,15 +20,15 @@
 						}
 						else if(data.status=='Circle')
 						{
-							$("#request").html("<a href='/friend_requests/all' class='pending'>Add to Circle</a>");
+							$("#request").html("<a href='/friend_requests/all' class='btn btn-warning'>Add to Circle</a>");
 						}
 						else if(data.status=='Unfriend')
 						{
-							$("#request").html("<a href='' class='pending'>Unfriend</a>");
+							$("#request").html("<a href='' class='btn btn-danger'>Unfriend</a>");
 						}
 						else if(data.status=='Confirm')
 						{
-							$("#request").html("<a href='/friend_requests/all' class='pending'>Confirm Friend Request</a>");
+							$("#request").html("<a href='/friend_requests/all' class='btn btn-info'>Confirm Friend Request</a>");
 						}
 						else 
 						{
@@ -37,7 +37,7 @@
 					}
 					else
 					{
-						$("#people").html("<p>"+data.people+"</p>");
+						$("#people").html("<p class='no_friend'>"+data.people+"</p>");
 						$("#request").html("")
 					}
 				},"json")
@@ -64,25 +64,100 @@
 	<style type="text/css">
 		.line_one{
 			text-transform: capitalize;
+			text-align: center;
+			font-size:25px;
+			font-weight: bold;
+			margin-top: 30px;
 		}
 		.line_two{
 			text-transform: capitalize;
+			text-align: center;
+			font-size:20px;
+			font-weight: bold;
 		}
 		#people input{
 			display:block;
 		}
+		h1{
+			text-align: center;
+		} 
+		#back{
+			float:right;
+			margin-right:100px;
+		}
+		#name_input{
+			width:500px;
+			height:40px;
+		}
+		#search_box form{
+			width:600px;
+			display:block;
+			margin-left: auto;
+			margin-right:auto;
+		}
+		#search_box h3{
+			width:600px;
+			display:block;
+			margin-left: auto;
+			margin-right:auto;
+		}
+		#search_box input{
+			display:block;
+		}
+		#search_box{
+			margin-top:25px;
+		}
+		.btn.btn-success{
+			margin-top:10px;
+			margin-left:420px;
+		}
+		.btn.btn-info{
+			display:block;
+			margin-left:auto;
+			margin-right:auto;
+			width:200px;
+		}
+		.btn.btn-danger{
+			display:block;
+			margin-left:auto;
+			margin-right:auto;
+			width:200px;
+		}
+		.btn.btn-warning{
+			display:block;
+			margin-left:auto;
+			margin-right:auto;
+			width:200px;
+		}
+		.no_friend{
+			color:red;
+			text-align: center;
+			font-size: 20px;
+			font-weight: bold;
+		}
+		.pending{
+			color:blue;
+			text-align: center;
+			font-size: 20px;
+			font-weight: bold;
+		}
 	</style>
 </head>
 <body>
-	<a href="/events/all">Back</a>
-	<h1>Find friends</h1>
-	<form action='/friends/search' method='post' id='search'>
-		<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-		<input type='text' name='friend[user_name]' placeholder='Enter User Name'>
-		<input type='submit' value='Submit'>
-	</form>
+	<a href="/friend_requests/all" id='back'>Back</a>
+	<h1>Social Calendar</h1>
+	<div id='search_box'>
+		<h3>Find friends</h3>
+		<form action='/friends/search' method='post' id='search'>
+			<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+			<input type='text' name='friend[user_name]' placeholder='Enter User Name' id='name_input'>
+			<input type='submit' value='Submit' class="btn btn-success">
+		</form>
+	</div>
+	
 	<div id='people'>
 	</div>
+
 	<div id='request'>
 	</div>
 </body>

@@ -1,4 +1,11 @@
-<h2>Sign in</h2>
+
+<html>
+<head>
+	<title></title>
+	<meta name="viewport" content="width=device-width"/>
+</head>
+<body>
+	<h2>Sign in</h2>
 
 <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
   <div id='email'><%= f.label :email %><br />
@@ -15,3 +22,6 @@
 <% end %>
 
 <%= render "devise/shared/links" %>
+
+</body>
+</html>

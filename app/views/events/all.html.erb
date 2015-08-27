@@ -10,6 +10,7 @@
 		}
 		.event{
 			display:inline-block;
+			margin:10px;
 		}
 		.event a{
 			display:block;
@@ -17,7 +18,29 @@
 		.pic_container{
 			width:610px;
 		}
-
+		h1{
+			width:600px;
+			margin-left:auto;
+			margin-right:auto;
+		} 
+		#back{
+			float:right;
+			margin-right:100px;
+		}
+		#nav{
+			width:800px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		#nav a{
+			margin:10px;
+		}
+		.btn.btn-danger{
+			width:300px;
+		}
+		h5{
+			text-align: center;
+		}
 	</style>
 		<script type="text/javascript">
 		$(document).ready(function(){
@@ -42,23 +65,26 @@
 	</script>
 </head>
 <body>
+	<a href="/homes/calendar" id='back'>Back</a>
+	<h1>Social Calendar</h1>
 	<div id='nav'>
-		<a href="/homes/calendar">Back</a>
 		<a href="/invitations/send_invitation">Send Invitations</a>
 		<a href="/invitations/sent_invitation">Currently Sent Invitations</a>
 		<a href="/events/confirm">Confirm Event</a>
 	</div>
 	<div id='your_events'>
-		<h1>All Your Events for the Week</h1>
+		<h2>All Your Events for the Week</h2>
 	<div id='pic_container'>
 		<% @events.each do |e|%>
 		<div class='event' id="event_<%=e.id%>">
-			<%= image_tag e.picture.image.url%>
+			<h5><%=e.date.strftime("%A") %>:<%=e.date.strftime("%m-%d-%Y") %></h5>
+	
+		<a href="/chats/all/<%=e.id %>"><%= image_tag e.picture.image.url%></a>	
 			<form action='/events/delete' method='post'>
 				<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
 				<input type='hidden' name='event[event_id]' value=<%=e.id %>>
 				<input type='hidden' name='event[user_id]' value=<%=@user.id %>>
-				<input type='submit' value='delete'>
+				<input type='submit' value='Delete' class='btn btn-danger'>
 			</form>
 		</div>	
 		<%end %>

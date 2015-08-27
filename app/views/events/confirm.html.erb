@@ -12,23 +12,82 @@
 				return false;
 			})
 		})
-
 	</script>
+	<style type="text/css">
+		#back{
+			float:right;
+			margin-right:100px;
+		}
+		h1{
+			width:600px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		img{
+			width:350px;
+			height:350px;
+		}
+		.invitation{
+			display:inline-block;
+			margin:10px;
+		}
+		.timedate{
+			font-weight: bold;
+			margin-left:auto;
+			margin-right:auto;
+			width:220px;
+
+		}
+		.description{
+			width:200px;
+			margin-left:auto;
+			margin-right:auto;
+			display:block;
+		}
+		.btn.btn-danger{
+			width:350px;
+		}
+		.user_info{
+			margin-left:20px;
+		}
+		.user_info img{
+			width:50px;
+			height:50px;
+			display:inline-block;
+		}
+		.user_info p{
+			display:inline-block;
+			text-transform: capitalize;
+			font-weight: bold;
+		}
+	</style>
 </head>
 <body>
+	<a href="/events/all" id='back'>Back</a>
+	<h1>Social Calendar</h1>
 	<div id='confirm_events'>
 		<h4>Confirm Event</h4>
 		<% @invitations.each do |i|%>
+			
 			<div class='invitation' id='confirm_<%=i.event.id %>'>
 				<%=image_tag i.event.picture.image.url%>
-				<p><%=i.event.description %></p>
-				<p><%= i.event.time.strftime("at %I:%M%p")%></p>
+				<div class='user_info'>
+				<%if i.user.avatar.blank? %>
+					<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
+				<%else %>
+					<%=image_tag i.user.avatar.url %>
+				<%end %>
+				<p><%=i.user.first_name %> <%= i.user.last_name %></p>
+			</div>
+				<p class='timedate'><%=i.event.date.strftime("%m-%d-%Y") %> <%=i.event.date.strftime("%A") %> <%= i.event.time.strftime("At %I:%M%p")%></p>
+				<p class='description'><%=i.event.description %></p>
+				
 				<form action='/joins/confirm' method='post'>
 					<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
 					<input type='hidden' name='join[user_id]' value="<%=@user.id %>">
 					<input type='hidden' name='join[event_id]' value=<%=i.event.id %>>
 					<input type='hidden' name='join[confirm]' value=<%=true%>>
-					<input type='submit' value='Confirm'> 
+					<input type='submit' value='Confirm' class='btn btn-danger'> 
 				</form>
 			</div>
 		<%end %>		

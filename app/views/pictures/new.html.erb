@@ -6,6 +6,59 @@
 		option, input{
 			display:block;
 		}
+		h1{
+			width:600px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		h4{
+			width:600px;
+			margin-left:auto;
+			margin-right:auto;
+			margin-top:50px;
+		}
+		#back{
+			float:right;
+			margin-right:100px;
+		}
+		.btn.btn-success{
+			text-transform: capitalize;
+			display:block;
+			width:100px;
+			margin-left:100px;
+		}
+		#picture_group{
+			height:30px;
+			width:300px;
+		}
+		label{
+			display:block;
+			margin:5px;
+		}
+		input{
+			display:block;
+			margin:5px;
+		}
+		select{
+			display: block;
+			margin:5px;
+		}
+		#picture_image{
+			width:300px;
+		}
+		form{
+			width:600px;
+			margin-left: auto;
+			margin-right:auto;
+		}
+		#go_group{
+			display:block;
+			width:400px;
+			margin-top:8px;
+			margin-left: auto;
+			margin-right:auto;
+			font-size:20px;
+		}
 	</style>
 	<script type="text/javascript">
 		//ajax submit
@@ -54,7 +107,9 @@
 	</script>
 </head>
 <body>
-	<a href="/homes/calendar">back</a>
+	<a href="/homes/calendar" id='back'>back</a>
+	<h1>Social Calendar</h1>
+	
 	<%if flash[:message] %>
 		<p><%=flash[:message] %></p>
 	<% end%>
@@ -64,15 +119,15 @@
 	</div>
 
 	<%= form_for @picture, :url =>'/pictures/create', :html=>{:multipart=>true} do |f|%>
-		<%= select_tag("picture[group]", options_for_select(@group_names)) %>
 		<%= hidden_field_tag("picture[user_id]", @user.id) %>
 		<div id='ng'>
 			 <%= text_field_tag("picture[new_group]") %>
 		</div>
 		<%= f.file_field :image %>
-	<%= f.submit :submit %>
+		<%= select_tag("picture[group]", options_for_select(@group_names)) %>
+		<%= f.submit :submit, class: "btn btn-success"  %>
 	<%end %>
-	<a href="/groups/all">Go to Groups</a>
+	<a href="/groups/all" id='go_group'>Go to Groups</a>
 </body>
 </html>
 

@@ -1,2 +1,129 @@
-<h1>Chats#all</h1>
-<p>Find me in app/views/chats/all.html.erb</p>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		input{
+			display:block;
+		}
+		.user_info img{
+			width:70px;
+			height:70px;
+			display: inline-block;
+		}
+		.content img{
+			width:300px;
+			height:350px;
+		}
+		.user_info_text{
+			display:inline-block;
+		}
+		h1{
+			width:600px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		input{
+			text-transform: capitalize;
+		}
+		h3{
+			margin-top:50px;
+			width:600px;
+			margin-left:auto;
+			margin-right: auto;
+		}
+		form{
+			width:620px;
+			display:block;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		#chat_message{
+			width:300px;
+			height:30px;
+		}
+		#back{
+			float:right;
+			margin-right:100px;
+		}
+		#chat_stream{
+			width:600px;
+			margin-right: auto;
+			margin-left:auto;
+			margin-top:50px;
+		}
+		.btn.btn-success{
+			margin-left:220px;
+		}
+		.user_info{
+			margin-bottom:5px;
+		} 
+		.delete{
+			margin-left:380px;
+		}
+		.chat{
+			margin:10px;
+		}
+		.user_info_text{
+			text-transform: capitalize;
+		}
+		.content{
+			width:315px;
+			margin-right: auto;
+			margin-left:auto;
+		}
+		#chat_stream{
+			overflow-y:scroll;
+			height:800px;
+		}
+	</style>
+</head>
+<body>
+	<a href="/streams/interact/<%= @event.id%>" id='back'>Back</a>
+	<h1>Social Calendar</h1>
+	<h3>Chat</h3>
+		<!-- Picture Form  -->
+		<%= form_for @chatter, :url =>'/chats/create', :html=>{:multipart=>true} do |f|%>
+			 <%= text_field_tag("chat[message]") %>
+			<%= hidden_field_tag("chat[user_id]", @user.id) %>
+			<%= hidden_field_tag("chat[event_id]", @event.id) %>
+			<%= %>
+			<%= f.file_field :picture%>
+			<%= f.submit :submit,  class: "btn btn-success" %>
+		<%end %>
+	<div id='chat_stream'>
+		<%@chats.each do |chat| %>
+			<div class='chat'>
+				<div class='user_info'>
+					<%if chat.user.avatar.blank?%>
+						<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
+					<%else %>
+						<%=image_tag chat.user.avatar.url %>
+					<% end%>
+					<div class='user_info_text'>
+						<p><%= chat.user.first_name%> <%=chat.user.last_name%></p>
+						<p><%= time_ago_in_words(chat.created_at)%></p>
+					</div>
+
+				</div>
+				<div class='content'>
+					<%if chat.message !='' && chat.picture_file_name !=nil%>
+						<%=image_tag chat.picture.url %>
+						<p><%=chat.message %></p>
+					<%elsif chat.message !='' && chat.picture_file_name ==nil %>
+						<p><%=chat.message %></p>
+					<%elsif chat.message ==''&& chat.picture_file_name!=nil  %>
+						<%=image_tag chat.picture.url %>
+					<% end%>
+				</div>
+				<%if @user.id ==chat.user_id %>
+					<a href="/chats/delete/<%=chat.id%>" class='delete'>Delete</a>
+				<%end %>
+				
+			</div>
+		<% end%>
+
+
+	</div>
+
+</body>
+</html>

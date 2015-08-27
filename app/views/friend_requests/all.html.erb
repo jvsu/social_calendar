@@ -1,6 +1,67 @@
 <html>
 <head>
 	<title>Friend Requests</title>
+	<style type="text/css">
+		#upper_container{
+			width:600px;
+			margin-left:auto;
+			margin-right:auto;
+		} 
+		#back{
+			float:right;
+			margin-right:100px;
+		}
+		#find_friends{
+			width:280px;
+			text-align: center
+		}
+		img{
+			width:250px;
+			height:250px;
+		}
+		.fr p{
+			text-align: center;
+			text-transform: capitalize;
+		}
+		.circ_assign{
+			width:270px;
+		}
+
+		.circ_assign p{
+			text-align: center;
+			text-transform: capitalize;
+		}
+		select{
+			height:30px;
+			width:150px;
+			margin-left:50px;
+		}
+		.fr{
+			margin:10px;
+			width:270px;
+			display:inline-block;
+		}
+		.btn.btn-danger{
+			margin-left:100px;
+		}
+		.btn.btn-info{
+			margin-left:70px;
+		}
+		.new_circ_name{
+			margin-left:50px;
+			height:30px;
+		}
+		.circ_assign input{
+			margin-top:5px;
+			margin-left:90px;
+		}
+		h4{
+			margin-left:20px;
+		}
+		.zero_action{
+			margin-left:70px;
+		}
+	</style>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
 	<script type="text/javascript">
 
@@ -39,30 +100,36 @@
 				};			
 			})
 		})
-
 	</script>
-
-
 </head>
 <body>
-	<a href="/homes/calendar">Back</a>
+	<a href="/homes/calendar" id='back'>Back</a>
 	<% if flash[:message]%>
 		<p><%=flash[:message]%></p>
 	<%end %>
-	<a href="/friends/find">Find Friends</a>
 
-	<h1>Circle Assignments</h1>
+	<div id='upper_container'>
+		<h1>Social Calendar</h1>
+		<a href="/friends/find" class='btn btn-success' id='find_friends'>Find Friends</a>
+	</div>
+	
+	<h4>Circle Assignments</h4>
 	<div id='circles'>
 		<!-- This adds your requests to a circle -->
 		<% if @circle_length <1%>
-			<p>No Friend Requests</p>
+			<p class='zero_action'>No Circle Assignments</p>
 
 		<%else %>
 				<%@your_requests.each do |r| %>
 				<div class='circ_assign'>
-					<p><%=r.first_name %></p>
-					<p><%= r.last_name %></p>
 					<p><%=r.user_name %></p>
+					<%if r.avatar.blank?%>
+						<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
+						<%else %>
+							<%=image_tag r.avatar.url %>
+						<% end%>
+					<p><%=r.first_name %> <%= r.last_name %></p>
+					
 					<form action='/circles/create' method='post'>
 						<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
 						<input type='hidden' name='circle[friend_id]' value="<%=r.id%>">
@@ -74,39 +141,47 @@
 						<input type='text' name='circle[new_name]' class='new_circ_name' placeholder='Input Circle Name' id='nc<%=r.id%>'>
 						<input type='hidden' name='circle[user_id]' value=<%=@user.id %>>
 
-						<input type='submit' value='submit'>
+						<input type='submit' value='Submit' class='btn btn-success'>
 					</form>
 				</div>
 			<% end%>
 		<%end %>
 	</div>
-	<h1>Friend Requests</h1>
+	<h4>Friend Requests</h4>
 	<div id='friend_requests'>
 		<!-- This is where you decline or confirm -->
-		<%@friend_requests.each do |fr| %>
-		<div class='fr'>
-			<p><%=fr.user.first_name %><%=fr.user.last_name%></p>
-			<form action='/friends/create' method='post'>
-				<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-				<!-- friend request id -->
-				<input type='hidden' name='friend[fr_id]' value=<%=fr.id %>>
-				<input type='hidden' name='friend[requester_id]' value=<%= fr.user_id%>>
-				<input type='hidden' name='friend[confirmer_id]' value=<%=fr.friend_id%>>
-				<!-- Circle Name or New Circle Name -->
-				<select name='friend[name]'>
-					<% @circle_names.each do |cn|%>
-						<option id="f<%=cn.delete(' ') %>_<%=fr.id%>!" value="<%=cn%>"><%=cn%></option>
-					<%end %>
-					<input type='text' name='friend[new_name]' class='new_circ_name' placeholder='Input Circle Name' id='nc<%=fr.id%>'>
-				</select>
-				<input type='submit' value='Confirm Friend'>
-			</form>
-			<a href="">Reject</a>
-		</div>
-			
-			
+		<%if @friend_requests_length ==0 %>
+			<p class='zero_action'>No Friend Requests</p>
+		<%else %>
+			<%@friend_requests.each do |fr| %>
+			<div class='fr'>
+				<p><%=fr.user.user_name %></p>
+				<%if fr.user.avatar.blank?%>
+					<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
+				<%else %>
+					<%=image_tag fr.user.avatar.url %>
+				<% end%>
 
+				<p><%=fr.user.first_name %> <%=fr.user.last_name%></p>
+				<form action='/friends/create' method='post'>
+					<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+					<!-- friend request id -->
+					<input type='hidden' name='friend[fr_id]' value=<%=fr.id %>>
+					<input type='hidden' name='friend[requester_id]' value=<%= fr.user_id%>>
+					<input type='hidden' name='friend[confirmer_id]' value=<%=fr.friend_id%>>
+					<!-- Circle Name or New Circle Name -->
+					<select name='friend[name]'>
+						<% @circle_names.each do |cn|%>
+							<option id="f<%=cn.delete(' ') %>_<%=fr.id%>!" value="<%=cn%>"><%=cn%></option>
+						<%end %>
+						<input type='text' name='friend[new_name]' class='new_circ_name' placeholder='Input Circle Name' id='nc<%=fr.id%>'>
+					</select>
+					<input type='submit' value='Confirm Friend' class='btn btn-info'>
+				</form>
+				<a href="" class='btn btn-danger'>Reject</a>
+			</div>
 		<% end%>
+		<%end %>	
 	</div>
 
 </body>

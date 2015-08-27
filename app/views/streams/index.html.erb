@@ -4,11 +4,13 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> 
 	<style type="text/css">
 	.event img{
-		width:300px;
-		height:300px;
+		width:350px;
+		height:350px;
 	}
 	.event{
 		display:inline-block;
+		width:360px;
+		border:1px solid #E8E8E8;
 	}
 	#bottom_container{
 		height:120px;
@@ -18,8 +20,14 @@
     	overflow-y: hidden;
     	white-space: nowrap;
 	}
+	::-webkit-scrollbar { 
+    display: none; 
+	}
 	.all_event_info{
-		height:20px;
+		width:355px;
+		border:1px solid #E8E8E8;
+		white-space: normal;
+		word-wrap: break-word;
 	}
 	.day_stream{
 		margin:10px;
@@ -39,6 +47,21 @@
 		}
 		.event{
 			margin:10px;
+		}
+		h1{
+			width:600px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		.description{
+			text-align: center;
+			vertical-align: middle;
+			/*white-space: normal;
+			word-wrap: break-word;*/
+		}
+		#back{
+			float:right;
+			margin-right:100px;
 		}
 	</style>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
@@ -102,97 +125,101 @@
 	</script>
 </head>
 <body>
-	<a href="/streams/all"><h1>All Events</h1></a>
+	<a href="/homes/calendar" id='back'>Back</a>
+	<h1>Social Calendar</h1>
+	
 	<div id='all_events'>
-		<%@all_events.each do |e|%>
-			<div class='event' id="v_all_events<%=e.id%>">
-				<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>
-				<div class='all_event_info' id="info_v_all_events<%=e.id%>">
-					<div class='user_info'>
-							<%@avatar.each do |av| %>
-								<%if av.user_id ==e.user.id %>
-									<%=image_tag av.profile_pic.url %>
-								<%else %>
+		<a href="/streams/all"><h1>All Events</h1></a>
+		<%if @all_events !=nil %>
+			<%@all_events.each do |e|%>
+				<div class='event' id="v_all_events<%=e.id%>">
+					<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>
+					<div class='all_event_info' id="info_v_all_events<%=e.id%>">
+						<div class='user_info'>
+								<%if e.user.avatar.blank?%>
 									<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
-								<%end %>
-							<%end %>
-							<p><%= e.user.first_name%> <%=e.user.last_name%></p>
+								<%else %>
+									<%=image_tag e.user.avatar.url %>
+								<% end%>
+								<p><%= e.user.first_name%> <%=e.user.last_name%></p>
 						</div>
-					<p><%=e.description %></p>
-				</div>
-			</div>
-			
+							<p class='description'><%=e.description %></p>
+					</div>
+				</div>	
+			<% end%>
+		<%else %>
+			<h3>You Have No Events Happening</h3> 
 		<% end%>
 	</div>
 
+
+
+
 	<div id='today'>
-		<%if @today.length>0 %>
-			<a href="/streams/view/today"><h1>Today</h1></a>
+		<%if @today !=nil %>
+			<%if @today.length >0 %>
+				<a href="/streams/view/today"><h1>Today</h1></a>
 			<% @today.each do |e|%>
 			<div class='event' id='t_<%=e.id%>'>
 				<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>
 				<div class='all_event_info' id="t_<%=e.id%>_all_events">
 					<div class='user_info'>
-							<%@avatar.each do |av| %>
-								<%if av.user_id ==e.user.id %>
-									<%=image_tag av.profile_pic.url %>
-								<%else %>
+							<%if e.user.avatar.blank?%>
 									<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
-								<%end %>
-							<%end %>
+								<%else %>
+									<%=image_tag e.user.avatar.url %>
+								<% end%>
 							<p><%= e.user.first_name%> <%=e.user.last_name%></p>
 						</div>
-					<p><%=e.description %></p>
+					<p class='description'><%=e.description %></p>
 				</div>
 			</div>
 			<%end %>
+			<% end%>
 		<%end %>
 	</div>
 
 
 	<div id='day1' class='day_stream'>
-		<% if @day1.length>0%>
-		<a href="/streams/view/1"><h1><%=@date1_name%>-<%=@day1_date_title %></h1></a>
-			<%@day1.each do |e|%>
-				<div class='event' id='1_<%=e.id%>'>
-					<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>
-					<div class='all_event_info' id="1_<%=e.id%>_all_events">
-						<div class='user_info'>
-							<%@avatar.each do |av| %>
-								<%if av.user_id ==e.user.id %>
-									<%=image_tag av.profile_pic.url %>
-								<%else %>
+		<% if @day1!=nil%>
+			<% if @day1.length>0%>
+				<a href="/streams/view/1"><h1><%=@date1_name%>-<%=@day1_date_title %></h1></a>
+				<%@day1.each do |e|%>
+					<div class='event' id='1_<%=e.id%>'>
+						<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>
+						<div class='all_event_info' id="1_<%=e.id%>_all_events">
+							<div class='user_info'>
+								<%if e.user.avatar.blank?%>
 									<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
-								<%end %>
-							<%end %>
-							<p><%= e.user.first_name%> <%=e.user.last_name%></p>
-						</div>
-					
-					<p><%=e.description %></p>
-				</div>
-				</div>
+								<%else %>
+									<%=image_tag e.user.avatar.url %>
+								<% end%>
+								<p><%= e.user.first_name%> <%=e.user.last_name%></p>
+							</div>
+						<p class='description'><%=e.description %></p>
+					</div>
+					</div>
+				<%end %>
 			<%end %>
 		<%end %>		
 	</div>
 	<div class='day_stream'>
-		<% if @day2.length>0%>
+		<% if @day2!=nil && @day2.length>0%>
 			<a href="/streams/view/2"><h1><%=@date2_name%>: <%=@day2_date_title %></h1></a> 
 			<%@day2.each do |e|%>
 				<div class='event' id='2_<%=e.id%>'>
 					<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>
 					<div class='all_event_info' id="2_<%=e.id%>_all_events">
 						<div class='user_info'>
-							<%@avatar.each do |av| %>
-								<%if av.user_id ==e.user.id %>
-									<%=image_tag av.profile_pic.url %>
-								<%else %>
+							<%if e.user.avatar.blank?%>
 									<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
-								<%end %>
-							<%end %>
+								<%else %>
+									<%=image_tag e.user.avatar.url %>
+								<% end%>
 							<p><%= e.user.first_name%> <%=e.user.last_name%></p>
 						</div>
 					
-						<p><%=e.description %></p>
+						<p class='description'><%=e.description %></p>
 					</div>
 				</div>
 			<%end %>
@@ -200,24 +227,22 @@
 	</div>
 
 	<div class='day_stream'>
-		<% if @day3.length>0%>
+		<% if @day3!=nil && @day3.length>0%>
 			<a href="/streams/view/3"><h1><%=@date3_name%>: <%=@day3_date_title %></h1></a> 
 			<%@day3.each do |e|%>
 				<div class='event' id='3_<%=e.id%>'>
 					<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>
 					<div class='all_event_info' id="3_<%=e.id%>_all_events">
 						<div class='user_info'>
-							<%@avatar.each do |av| %>
-								<%if av.user_id ==e.user.id %>
-									<%=image_tag av.profile_pic.url %>
-								<%else %>
+							<%if e.user.avatar.blank?%>
 									<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
-								<%end %>
-							<%end %>
+								<%else %>
+									<%=image_tag e.user.avatar.url %>
+								<% end%>
 							<p><%= e.user.first_name%> <%=e.user.last_name%></p>
 						</div>
 					
-						<p><%=e.description %></p>
+						<p class='description'><%=e.description %></p>
 					</div>
 				</div>
 			<%end %>
@@ -225,24 +250,22 @@
 	</div>
 	
 	<div class='day_stream'>
-		<% if @day4.length>0%>
+		<% if @day4!=nil && @day4.length>0 %>
 			<a href="/streams/view/4"><h1><%=@date4_name%>: <%=@day4_date_title %></h1></a>
 			<%@day4.each do |e|%>
 				<div class='event' id='4_<%=e.id%>'>
 					<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>
 					<div class='all_event_info' id="4_<%=e.id%>_all_events">
 						<div class='user_info'>
-							<%@avatar.each do |av| %>
-								<%if av.user_id ==e.user.id %>
-									<%=image_tag av.profile_pic.url %>
-								<%else %>
+							<%if e.user.avatar.blank?%>
 									<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
-								<%end %>
-							<%end %>
+								<%else %>
+									<%=image_tag e.user.avatar.url %>
+								<% end%>
 							<p><%= e.user.first_name%> <%=e.user.last_name%></p>
 						</div>
 					
-						<p><%=e.description %></p>
+						<p class='description'><%=e.description %></p>
 					</div>
 				</div>
 			<%end %>
@@ -250,24 +273,21 @@
 	</div>
 	
 	<div class='day_stream'>
-		<% if @day5.length>0%>
+		<% if @day5!=nil && @day5.length>0 %>
 		<a href="/streams/view/5"><h1><%=@date5_name%>: <%=@day5_date_title %></h1></a>
 			<%@day5.each do |e|%>
 				<div class='event' id='5_<%=e.id%>'>
 					<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>
 					<div class='all_event_info' id="5_<%=e.id%>_all_events">
 					<div class='user_info'>
-							<%@avatar.each do |av| %>
-								<%if av.user_id ==e.user.id %>
-									<%=image_tag av.profile_pic.url %>
-								<%else %>
+							<%if e.user.avatar.blank?%>
 									<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
-								<%end %>
-							<%end %>
+								<%else %>
+									<%=image_tag e.user.avatar.url %>
+								<% end%>
 							<p><%= e.user.first_name%> <%=e.user.last_name%></p>
 						</div>
-					
-						<p><%=e.description %></p>
+						<p class='description'><%=e.description %></p>
 				</div>
 				</div>
 			<%end %>
@@ -275,24 +295,22 @@
 	</div>
 	
 	<div class='day_stream'>
-		<% if @day6.length>0%>
+		<% if @day6!=nil && @day6.length>0 %>
 		<a href="/streams/view/6"><h1><%=@date6_name%>: <%=@day6_date_title %></h1></a>
 			<%@day6.each do |e|%>
 				<div class='event' id='6_<%=e.id%>'>
 					<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>
 					<div class='all_event_info' id="6_<%=e.id%>_all_events">
 						<div class='user_info'>
-							<%@avatar.each do |av| %>
-								<%if av.user_id ==e.user.id %>
-									<%=image_tag av.profile_pic.url %>
-								<%else %>
+							<%if e.user.avatar.blank?%>
 									<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
-								<%end %>
-							<%end %>
+								<%else %>
+									<%=image_tag e.user.avatar.url %>
+								<% end%>
 							<p><%= e.user.first_name%> <%=e.user.last_name%></p>
 						</div>
 					
-						<p><%=e.description %></p>
+						<p class='description'><%=e.description %></p>
 					</div>
 				</div>
 			<%end %>
@@ -300,24 +318,22 @@
 	</div>
 	
 	<div class='day_stream'>
-		<% if @day7.length>0%>
+		<% if @day7!=nil && @day7.length>0 %>
 		<a href="/streams/view/7"><h1><%=@date7_name%>: <%=@day7_date_title %></h1></a>
 			<%@day7.each do |e|%>
 				<div class='event' id='7_<%=e.id%>'>
 					<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>
 					<div class='all_event_info' id="7_<%=e.id%>_all_events">
 						<div class='user_info'>
-							<%@avatar.each do |av| %>
-								<%if av.user_id ==e.user.id %>
-									<%=image_tag av.profile_pic.url %>
-								<%else %>
+							<%if e.user.avatar.blank?%>
 									<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
-								<%end %>
-							<%end %>
+								<%else %>
+									<%=image_tag e.user.avatar.url %>
+								<% end%>
 							<p><%= e.user.first_name%> <%=e.user.last_name%></p>
 						</div>
 					
-						<p><%=e.description %></p>
+						<p class='description'><%=e.description %></p>
 					</div>
 				</div>
 			<%end %>

@@ -1,16 +1,67 @@
 <html>
 <head>
 	<title></title>
+	<style type="text/css">
+			h1{
+			width:600px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		img{
+			width:350px;
+			height:350px;
+		}
+		.event{
+			display:inline-block;
+			margin:10px;
+		}
+		.user_info img{
+			width:40px;
+			height:40px;
+			display:inline-block;
+			margin:10px;
+		}
+		.user_info p{
+			display:inline-block;
+			text-transform: capitalize;
+			
+		}
+		.description{
+			text-align: center;
+			vertical-align: middle;
+			margin-top:10px;
+		}
+		#back{
+			float:right;
+			margin-right:100px;
+		}
+		h2{
+			margin-left:20px;
+		}
+	</style>
 </head>
 <body>
-	<h1>All Events</h1>
+	<a href="/streams/index" id='back'>Back</a>
+	<h1>Social Calendar</h1>
+	<h2>All Events</h2>
 	<div id='all_events'>
 		<%@all_events.each do |e|%>
 			<div class='event' id="v_all_events<%=e.id%>">
-				<a href=""><%= image_tag e.picture.image.url%></a>
+				<div class='user_info'>
+							<%@avatar.each do |av| %>
+								<%if av.user_id ==e.user.id %>
+									<%=image_tag av.profile_pic.url %>
+									<%@pic =true %>
+								<%end %>
+							<%end %>
+							<%if @pic ==false %> 
+								<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
+							<%end %> 
+							<p><%= e.user.first_name%> <%=e.user.last_name%></p>
+						</div>
+				<a href="/streams/interact/<%=e.id %>"><%= image_tag e.picture.image.url%></a>
 				<div class='all_event_info' id="info_v_all_events<%=e.id%>">
-					<p><%= e.user.first_name%> <%=e.user.last_name%></p>
-					<p><%=e.description %></p>
+					<p class='description'><%=e.description %></p>
 				</div>
 			</div>
 		<% end%>
