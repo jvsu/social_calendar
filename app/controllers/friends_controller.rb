@@ -1,7 +1,10 @@
 require 'json' 
 class FriendsController < ApplicationController
   def all
-
+    @user = current_user
+    @circles = Circle.all.where(user_id:@user.id)
+    @friends = Friend.all
+    @people = User.all
   end
 
   def view

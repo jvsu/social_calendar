@@ -1,5 +1,8 @@
 class CirclesController < ApplicationController
   def index
+    @user = current_user
+    @circles = Circle.all.where(user_id:@user.id)
+   
   end
 
   def new

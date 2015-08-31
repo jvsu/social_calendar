@@ -203,6 +203,8 @@ Rails.application.routes.draw do
   match '/profiles/view' => "profiles#view", :via=>[:get,:post];
   match '/profiles/update' => "profiles#update", :via=>[:get,:post];
  match '/chats/create' => "chats#create", :via=>[:get,:post];
+  match '/circles/index' => "circles#index", :via=>[:get,:post];
+   match '/friends/all' => "friends#all", :via=>[:get,:post];
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

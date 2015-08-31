@@ -42,6 +42,7 @@ gem 'devise'
 
 gem "paperclip", "~>4.2"
 
+gem 'rails_12factor', group: :production
 
 
 # Use ActiveModel has_secure_password

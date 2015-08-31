@@ -1,2 +1,64 @@
-<h1>Friends#all</h1>
-<p>Find me in app/views/friends/all.html.erb</p>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		h1{
+			text-align: center;
+			margin-top:10px;
+		}
+		.friend img{
+			width:350px;
+			height:350px;
+		}
+		.friend{
+			display:inline-block;
+			border:1px solid black;
+		}
+		.friend_stream{
+			display:inline-block;
+		}
+	</style>
+</head>
+<body>
+	<h1>Social Calendar</h1>
+	<h2>Circles</h2>
+	<div id='circle_stream'>
+		<% @circles.each do |c|%>
+			<div class='circ'>
+				<h4><%=c.name %></h4>
+				<%@friends.each do |friend| %>
+					
+						<%if friend.circle_id ==c.id %>
+						<div class='friend_stream'>
+							<%@people.each do |p| %>
+									<%if p.id == friend.friend_num%>
+										<div class='friend'>
+											<p><%=p.first_name %> <%=p.last_name %></p>
+											<%if p.avatar.blank? %>
+												<img src="http://sanbernardinorising.org/wp-content/uploads/2013/07/NO-IMAGE-AVAILABLE.jpg">
+											<%else %>
+												<%= image_tag p.avatar.url%>
+											<%end %>
+											<p><%=p.user_name %></p>
+											<a href="">Unfriend</a>
+										</div>
+									<% end%>
+							<%end %>
+						</div>	
+					<% end%>	
+				<%end %>
+			</div>
+		<% end%>
+	</div>
+</body>
+</html>
+
+
+
+</body>
+</html>

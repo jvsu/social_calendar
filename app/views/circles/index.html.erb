@@ -1,2 +1,58 @@
-<h1>Circles#index</h1>
-<p>Find me in app/views/circles/index.html.erb</p>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		h1{
+			text-align: center;
+			margin-top:10px;
+		}
+		.friend img{
+			width:350px;
+			height:350px;
+		}
+		.friend{
+			display:inline-block;
+			border:1px solid black;
+		}
+		.friend_stream{
+			display:inline-block;
+		}
+		h3{
+			text-transform: capitalize;
+		}
+		h3{
+			text-align: center;
+		}
+		a{
+			display:block;
+			text-align: center;
+		}
+		form{
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<h1>Social Calendar</h1>
+
+	<div id='stream'>
+		<%@circles.each do |c| %>
+			<div class='cirlce'>
+				<h3><%= c.name%></h3>	
+				<a href="">Edit</a>
+				<div id='form_<%=c.id%>'>
+					<form>
+						<input type='text' name='circle[name]' placeholder='Enter Name'>
+						<input type='submit' value='Submit'>
+					</form>
+
+				</div>
+				<a href="">Delete</a>
+				<% if flash[:message] %>
+					<p><%=flash[:message] %></p>
+				<%end %>
+			</div>
+		<% end%>
+	</div>
+</body>
+</html>
