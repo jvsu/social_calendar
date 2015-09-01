@@ -24,7 +24,7 @@ default: &default
 development:
   <<: *default
   database: social_calendar_development
-  username: social_calendar
+  username: ubuntu
   password: <%= ENV['SOCIAL_CALENDAR_DATABASE_PASSWORD'] %>
 
   # The specified database role being used to connect to postgres.
@@ -60,7 +60,7 @@ development:
 test:
   <<: *default
   database: social_calendar_test
-  username: social_calendar
+  username: ubuntu
   password: <%= ENV['SOCIAL_CALENDAR_DATABASE_PASSWORD'] %>
 
 # As with config/secrets.yml, you never want to store sensitive information,
@@ -85,5 +85,5 @@ test:
 production:
   <<: *default
   database: social_calendar_production
-  username: social_calendar
+  username: ubuntu
   password: <%= ENV['SOCIAL_CALENDAR_DATABASE_PASSWORD'] %>
