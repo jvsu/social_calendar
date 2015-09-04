@@ -8,6 +8,8 @@ class Event < ActiveRecord::Base
   has_many :joins
   has_many :saves
   has_many :invitations
-  has_attached_file :pic
-  validates_attachment_content_type :pic, :content_type => /\Aimage/
+  validates :description, :date, :time, :join_threshold, :circle_id, :user_id,:picture_id, presence:true
+  validates :join_threshold, numericality:true
+
+
 end
