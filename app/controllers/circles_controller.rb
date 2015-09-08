@@ -16,7 +16,7 @@ class CirclesController < ApplicationController
   			if circ.save
   				#if circle saves
           #create entry on friends table
-  				# friend = Friend.new(user_id:circle_params[:user_id],circle_id:circ.id,friend_num:circle_params[:friend_id],confirmed:true).save
+  				friend = Friend.new(user_id:circle_params[:user_id],circle_id:circ.id,friend_num:circle_params[:friend_id],confirmed:true).save
   				
           #find the friend_request entry 
           friend_request = FriendRequest.all.where(user_id:circle_params[:user_id],friend_id:circle_params[:friend_id])
