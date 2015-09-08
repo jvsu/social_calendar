@@ -129,8 +129,9 @@
 	<h1>Social Calendar</h1>
 	
 	<div id='all_events'>
-		<a href="/streams/all"><h1>All Events</h1></a>
+		
 		<%if @all_events !=nil %>
+		<a href="/streams/all"><h1>All Events</h1></a>
 			<%@all_events.each do |e|%>
 				<div class='event' id="v_all_events<%=e.id%>">
 					<a href="/streams/interact/<%=e.id%>"><%= image_tag e.picture.image.url%></a>

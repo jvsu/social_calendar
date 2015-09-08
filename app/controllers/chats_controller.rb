@@ -5,7 +5,6 @@ class ChatsController < ApplicationController
     @chats = Chat.all.where(event_id:@event.id).order(created_at: :desc)
     @avatars = Avatar.all
     @chatter = Chat.new
-    @pic = false
   end
 
   def view

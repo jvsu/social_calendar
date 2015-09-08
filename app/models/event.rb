@@ -8,8 +8,6 @@ class Event < ActiveRecord::Base
   has_many :joins
   has_many :saves
   has_many :invitations
-  validates :description, :date, :time, :join_threshold, :circle_id, :user_id,:picture_id, presence:true
+  validates :description, :date, :join_threshold, :circle_id, :user_id,:picture_id, presence:true
   validates :join_threshold, numericality:true
-
-
 end
