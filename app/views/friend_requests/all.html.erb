@@ -164,7 +164,7 @@
 				<% end%>
 
 				<p><%=fr.user.first_name %> <%=fr.user.last_name%></p>
-				<form action='/friends/confirm' method='post'>
+				<form action='/circles/confirm' method='post'>
 					<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
 					<!-- friend request id -->
 					<input type='hidden' name='friend[fr_id]' value=<%=fr.id %>>

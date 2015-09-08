@@ -47,7 +47,6 @@ class FriendRequestsController < ApplicationController
     @friend_requests = FriendRequest.all.where(friend_id:@user.id,pending_confirmer:true)
     @friend_requests_length = @friend_requests.length
     
-    
   end
 
   def update
@@ -55,6 +54,7 @@ class FriendRequestsController < ApplicationController
   end
 
   def delete
+
   end
   private
   def request_params
