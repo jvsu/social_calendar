@@ -167,15 +167,14 @@
 				<form action='/circles/confirm' method='post'>
 					<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
 					<!-- friend request id -->
-					<input type='hidden' name='friend[fr_id]' value=<%=fr.id %>>
-					<input type='hidden' name='friend[requester_id]' value=<%= fr.user_id%>>
-					<input type='hidden' name='friend[confirmer_id]' value=<%=fr.friend_id%>>
+					<input type='hidden' name='circle[user_id]' value=<%= @user.id%>>
+					<input type='hidden' name='circle[friend_id]' value=<%=fr.user_id %>>
 					<!-- Circle Name or New Circle Name -->
-					<select name='friend[name]'>
+					<select name='circle[name]'>
 						<% @circle_names.each do |cn|%>
 							<option id="f<%=cn.delete(' ') %>_<%=fr.id%>!" value="<%=cn%>"><%=cn%></option>
 						<%end %>
-						<input type='text' name='friend[new_name]' class='new_circ_name' placeholder='Input Circle Name' id='nc<%=fr.id%>'>
+						<input type='text' name='circle[new_name]' class='new_circ_name' placeholder='Input Circle Name' id='nc<%=fr.id%>'>
 					</select>
 					<input type='submit' value='Confirm Friend' class='btn btn-info'>
 				</form>

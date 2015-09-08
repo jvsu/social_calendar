@@ -72,17 +72,16 @@ class CirclesController < ApplicationController
 
   def confirm
     #create a circle, friend entry, update friend request
-      if(circle_params[:name]=="new circle") 
+      if(confirm_params[:name]=="new circle") 
         #create new circle
-        circ = Circle.new(name:circle_params[:new_name],user_id:circle_params[:user_id])
+        circ = Circle.new(name:confirm_params[:new_name],user_id:confirm_params[:user_id])
         if circ.save
           #if circle saves
           #create entry on friends table
-          friend = Friend.new(user_id:circle_params[:user_id],circle_id:circ.id,friend_num:circle_params[:friend_id],confirmed:true).save
+          # friend = Friend.new(user_id:confirm_params[:user_id],circle_id:circ.id,friend_num:confirm_params[:friend_id],confirmed:true).save
           
-          #find the friend_request entry 
-          friend_request = FriendRequest.all.where(user_id:circle_params[:user_id],friend_id:circle_params[:friend_id])
-          
+          #find the friend_request entry where a person sent you the request
+          friend_request = FriendRequest.all.where(user_id:confirm_params[:friend_id],friend_id:confirm_params[:user_id])
           #update friend_request pending_requester to confirm you assigned your friend to a circle. 
           update = FriendRequest.find(friend_request[0][:id]).update(pending_confirmer:false)
           
@@ -98,16 +97,16 @@ class CirclesController < ApplicationController
       else
         #if not a new circle
         #find the id of the circle name
-        circle = Circle.all.where(:name=>circle_params[:name],user_id:circle_params[:user_id])
+        circle = Circle.all.where(:name=>confirm_params[:name],user_id:confirm_params[:user_id])
         #if uncategorized doesn't exist already put it in
         if circle.length ==0 
           #create the new circle here
-          new_circle = Circle.new(name:circle_params[:name],user_id:circle_params[:user_id]).save
+          new_circle = Circle.new(name:confirm_params[:name],user_id:confirm_params[:user_id]).save
           #add to the friends table
-          friend = Friend.new(user_id:circle_params[:user_id],circle_id:new_circle.id,friend_num:circle_params[:friend_id],confirmed:true)
+          friend = Friend.new(user_id:confirm_params[:user_id],circle_id:new_circle.id,friend_num:confirm_params[:friend_id],confirmed:true)
           if friend.save
             #update friend request
-            friend_request = FriendRequest.all.where(user_id:circle_params[:user_id],friend_id:circle_params[:friend_id])
+            friend_request =  FriendRequest.all.where(user_id:confirm_params[:friend_id],friend_id:confirm_params[:user_id])
             update = FriendRequest.find(friend_request[0][:id]).update(pending_confirmer:false)
 
             flash[:message]="Friend Added to Circle" 
@@ -118,8 +117,8 @@ class CirclesController < ApplicationController
           end
         else
           circ=circle[0]
-          friend = Friend.new(user_id:circle_params[:user_id],circle_id:circ[:id],friend_num:circle_params[:friend_id],confirmed:true)
-          friend_request = FriendRequest.all.where(user_id:circle_params[:user_id],friend_id:circle_params[:friend_id])
+          friend = Friend.new(user_id:confirm_params[:user_id],circle_id:circ[:id],friend_num:confirm_params[:friend_id],confirmed:true)
+          friend_request =  FriendRequest.all.where(user_id:confirm_params[:friend_id],friend_id:confirm_params[:user_id])
           update = FriendRequest.find(friend_request[0][:id]).update(pending_confirmer:false)
  
           if friend.save
@@ -139,5 +138,9 @@ class CirclesController < ApplicationController
   private
   def circle_params
   	params.require(:circle).permit(:friend_id,:name,:new_name,:user_id)
+  end
+
+  def confirm_params
+     params.require(:circle).permit(:friend_id, :name, :new_name, :user_id)
   end
 end
