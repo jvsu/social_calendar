@@ -30,7 +30,6 @@ class FriendRequestsController < ApplicationController
     end
     @circle_names = circle_names.uniq
 
-
     @circles = FriendRequest.all.where(user_id:@user.id,pending_requester:true)
     @circle_length = @circles.length
     @your_requests = []
